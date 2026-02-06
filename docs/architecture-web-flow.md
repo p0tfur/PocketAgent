@@ -4,11 +4,194 @@ Complete breakdown of what happens when you type "Send Mom I'll be late tonight"
 
 ---
 
-## The 3 Pieces
+## You Have 3 Physical Things
+
+```
+📱 Phone 1 — your daily phone (in your pocket, anywhere)
+💻 Laptop  — sitting at home, always on, plugged in
+📱 Phone 2 — the agent phone (sitting next to laptop, on WiFi)
+```
+
+The laptop does EVERYTHING. It runs both the web app AND the kernel.
+
+```
+Phone 1 = the remote control  (just a web browser)
+Laptop  = the brain           (runs the website + AI + sends ADB commands)
+Phone 2 = the robot hands     (receives ADB commands, taps/types on screen)
+```
+
+Phone 1 never talks to Phone 2 directly. Everything goes through the laptop.
+
+---
+
+## What's Running on the Laptop
+
+```
+💻 Your Laptop (home desk, always on)
+┌─────────────────────────────────────────┐
+│                                         │
+│   1. SvelteKit app (the website)        │
+│      - Shows a text box + run button    │
+│      - Listens on port 3000             │
+│                                         │
+│   2. Kernel (the AI brain)              │
+│      - Gets called BY the SvelteKit app │
+│      - Talks to Groq/OpenAI over internet│
+│      - Sends ADB commands to Phone 2    │
+│                                         │
+│   3. ADB connection to Phone 2          │
+│      - adb connect 192.168.1.42:5555    │
+│      - Already paired, always connected │
+│                                         │
+│   4. Tailscale (just networking)        │
+│      - Makes this laptop reachable      │
+│        from anywhere as 100.64.0.2      │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## What Happens Step by Step
+
+### Step 0: Setup (one time)
+
+```
+You plug Phone 2 into laptop USB
+You run: adb tcpip 5555
+You unplug Phone 2, put it on charger next to laptop
+Laptop runs: adb connect 192.168.1.42:5555 ← Phone 2's WiFi IP
+Now laptop can control Phone 2 wirelessly
+You start the SvelteKit app: bun run dev
+Tailscale is running on laptop + Phone 1
+```
+
+### Step 1: You open the web app
+
+```
+📱 Phone 1 (you're at a coffee shop)
+    │
+    │  You open browser: http://100.64.0.2:3000
+    │                     ^^^^^^^^^^^^^^^^
+    │                     This is your laptop's Tailscale IP
+    │
+    │  Tailscale encrypts this and tunnels it to your laptop at home
+    │
+    ▼
+💻 Laptop (at home)
+    SvelteKit serves the web page back to your phone's browser
+```
+
+### Step 2: You type the goal and hit Run
+
+```
+📱 Phone 1 browser
+    │
+    │  You type: "Send Mom I'll be late tonight"
+    │  You tap: [RUN]
+    │
+    │  Browser sends: POST http://100.64.0.2:3000/api/run
+    │                 body: { goal: "Send Mom I'll be late tonight" }
+    │
+    ▼
+💻 Laptop receives this HTTP request
+    │
+    │  SvelteKit API route catches it
+    │  Calls: kernel.run("Send Mom I'll be late tonight")
+    │
+    │  NOW THE KERNEL LOOP STARTS (on the laptop):
+    │
+    ▼
+```
+
+### Step 3: Kernel loop (runs on laptop, controls Phone 2)
+
+```
+💻 Laptop                                          📱 Phone 2
+    │                                                   │
+    │  adb shell uiautomator dump ────────────────────>│
+    │  "tell me what's on your screen"                  │
+    │                                                   │ (sends XML back)
+    │<──────────────────────────────────────────────────│
+    │                                                   │
+    │  Parses XML: "home screen, WhatsApp icon at 540,800"
+    │                                                   │
+    │  Sends to Groq API ──────────────> ☁️ Internet    │
+    │  "screen shows home, goal is send msg to Mom"     │
+    │                                                   │
+    │  Groq replies: { action: "launch", package: "com.whatsapp" }
+    │                                                   │
+    │  adb shell monkey -p com.whatsapp ──────────────>│
+    │  "open WhatsApp"                                  │ (WhatsApp opens)
+    │                                                   │
+    │  (waits 2 seconds)                                │
+    │                                                   │
+    │  adb shell uiautomator dump ────────────────────>│
+    │  "what's on screen now?"                          │
+    │                                                   │ (sends XML back)
+    │<──────────────────────────────────────────────────│
+    │                                                   │
+    │  "WhatsApp is open, I see search icon"            │
+    │                                                   │
+    │  ... repeats 5 more times until message is sent   │
+    │                                                   │
+    │  Kernel returns: { success: true, steps: 7 }     │
+    │                                                   │
+```
+
+### Step 4: Result comes back to your phone
+
+```
+💻 Laptop
+    │
+    │  kernel.run() finished
+    │  SvelteKit sends HTTP response back
+    │
+    ▼
+📱 Phone 1 (still at coffee shop)
+    │
+    │  Browser shows: "Done! Sent in 7 steps (12.4s)"
+```
+
+---
+
+## Where Tailscale Fits
+
+Tailscale is just a wire. It connects Phone 1 to the laptop when they're on different networks. If they're on the same WiFi, you don't even need Tailscale.
+
+```
+Without Tailscale:  Phone 1 ──WiFi──> Laptop ──WiFi──> Phone 2
+                    (must be same WiFi)
+
+With Tailscale:     Phone 1 ──Tailscale tunnel──> Laptop ──WiFi──> Phone 2
+                    (works from anywhere)
+```
+
+Tailscale is invisible to the kernel. The kernel doesn't know or care about Tailscale. It just talks to ADB like normal. Tailscale just makes the network path between Phone 1's browser and the laptop work across the internet.
+
+```
+WHAT GETS INSTALLED WHERE:
+
+  Phone 1:  Tailscale app (from Play Store)
+  Laptop:   Tailscale daemon (curl install)
+  Phone 2:  NOTHING. Just USB debugging ON.
+```
+
+---
+
+---
+
+# Technical Deep Dive
+
+Detailed diagrams for implementation reference.
+
+---
+
+## The 3 Pieces (Technical View)
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   PHONE 1       │     │   SERVER         │     │   PHONE 2       │
+│   PHONE 1       │     │   LAPTOP/SERVER  │     │   PHONE 2       │
 │   (your daily)  │     │   (Raspberry Pi, │     │   (agent phone)  │
 │                 │     │    VPS, laptop)  │     │                 │
 │   Browser with  │     │   SvelteKit app  │     │   Android phone │
@@ -30,7 +213,7 @@ When all 3 devices are on the same home/office WiFi:
 ```
 ┌──────────────────────── Home WiFi (192.168.1.x) ────────────────────────┐
 │                                                                          │
-│   Phone 1                    Server                     Phone 2          │
+│   Phone 1                    Laptop                     Phone 2          │
 │   192.168.1.10               192.168.1.100              192.168.1.42     │
 │                                                                          │
 │   Browser ──HTTP──> SvelteKit (:3000)                                   │
@@ -52,8 +235,6 @@ When all 3 devices are on the same home/office WiFi:
 │                                                                          │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
-
-**Problem:** Only works when you're home. Leave the house = can't reach the server.
 
 ---
 
@@ -77,7 +258,7 @@ Tailscale creates a private encrypted network across all your devices, no matter
 ┌──────│──────────────────────────────────────────┐
 │      │                                           │
 │   ┌──▼──────────────────┐    ┌────────────────┐ │
-│   │ Server               │    │ Phone 2        │ │
+│   │ Laptop               │    │ Phone 2        │ │
 │   │ Tailscale: 100.64.0.2│   │ 192.168.1.42   │ │  ← Same local
 │   │                      │    │                │ │     network
 │   │ SvelteKit + Kernel   │────│ ADB WiFi :5555 │ │
@@ -88,21 +269,15 @@ Tailscale creates a private encrypted network across all your devices, no matter
 └───────────────────────────────────────────────────┘
 ```
 
-**What Tailscale does:**
-- Phone 1 (anywhere) can reach Server at `100.64.0.2` as if they're on the same network
-- Encrypted WireGuard tunnel, no port forwarding, no public IP needed
-- Server + Phone 2 stay at home, always connected via local WiFi
-- Phone 2 does NOT need Tailscale — only Phone 1 and Server need it
-
 ---
 
-## The Full Sequence — Step by Step
+## The Full Sequence — With Timestamps
 
 Here's exactly what happens when you type "Send Mom I'll be late tonight" and hit enter:
 
 ```
-TIME    PHONE 1 (browser)          SERVER (SvelteKit + Kernel)         PHONE 2 (agent)
-─────   ─────────────────          ──────────────────────────          ────────────────
+TIME    PHONE 1 (browser)          LAPTOP (SvelteKit + Kernel)         PHONE 2 (agent)
+─────   ─────────────────          ───────────────────────────         ────────────────
 
 0.0s    User types goal
         "Send Mom I'll be
@@ -194,7 +369,7 @@ TIME    PHONE 1 (browser)          SERVER (SvelteKit + Kernel)         PHONE 2 (
 
 ---
 
-## The Communication Layers
+## The 4 Communication Layers
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -211,7 +386,7 @@ TIME    PHONE 1 (browser)          SERVER (SvelteKit + Kernel)         PHONE 2 (
 │           ▼                                 │                      │
 │  LAYER 3: Web Server                                               │
 │  ┌───────────────────────────────────────────────────────────────┐ │
-│  │ SvelteKit backend (server-side, runs on the Server)           │ │
+│  │ SvelteKit backend (server-side, runs on the Laptop)           │ │
 │  │ - API route: POST /api/run { goal }                           │ │
 │  │ - Starts kernel.run() as async task                           │ │
 │  │ - Streams step updates back to browser via SSE                │ │
@@ -238,7 +413,7 @@ TIME    PHONE 1 (browser)          SERVER (SvelteKit + Kernel)         PHONE 2 (
 │  ┌───────────────────────────────────────────────────────────────┐ │
 │  │ ADB over WiFi (TCP connection to Phone 2)                     │ │
 │  │                                                               │ │
-│  │ Server ──TCP:5555──> Phone 2                                  │ │
+│  │ Laptop ──TCP:5555──> Phone 2                                  │ │
 │  │                                                               │ │
 │  │ Commands:                                                     │ │
 │  │   adb shell uiautomator dump    (read screen)                │ │
@@ -254,45 +429,7 @@ TIME    PHONE 1 (browser)          SERVER (SvelteKit + Kernel)         PHONE 2 (
 
 ---
 
-## Where Tailscale Fits
-
-Tailscale is NOT part of the execution flow. It's a **network layer** that makes Phone 1 able to reach the Server when they're on different networks.
-
-```
-WITHOUT TAILSCALE:
-
-  Phone 1 ──192.168.1.x──> Server ──192.168.1.x──> Phone 2
-
-  ✓ Works on same WiFi
-  ✗ Doesn't work from outside
-
-
-WITH TAILSCALE:
-
-  Phone 1 ──100.64.0.1──┐
-                         │ Tailscale tunnel
-                         │ (encrypted WireGuard)
-                         │
-  Server ──100.64.0.2 ──┘──192.168.1.x──> Phone 2
-
-  ✓ Works from ANYWHERE
-  ✓ No port forwarding
-  ✓ No public IP needed
-  ✓ Encrypted
-
-
-WHAT GETS INSTALLED WHERE:
-
-  Phone 1:  Tailscale app (from Play Store)
-  Server:   Tailscale daemon (curl install)
-  Phone 2:  NOTHING. Just USB debugging ON.
-```
-
-Tailscale is invisible to the kernel. The kernel doesn't know or care about Tailscale. It just talks to ADB like normal. Tailscale just makes the network path between Phone 1's browser and the Server work across the internet.
-
----
-
-## The SvelteKit App Structure
+## SvelteKit App Structure
 
 ```
 web/
@@ -312,7 +449,7 @@ web/
 ├── package.json
 └── svelte.config.js
 
-kernel (existing):
+kernel (existing, no changes needed except kernel.ts):
 ├── src/
 │   ├── kernel.ts                      ← Modified: export run() function
 │   ├── actions.ts                     ← No changes
@@ -331,7 +468,7 @@ kernel (existing):
 YOU type "Send Mom I'll be late tonight"
     │
     ▼
-Phone 1 browser ──HTTP POST──> Server (SvelteKit API route)
+Phone 1 browser ──HTTP POST──> Laptop (SvelteKit API route)
     │                               │
     │                               ▼
     │                          kernel.run(goal)
@@ -365,7 +502,7 @@ Phone 1 browser ──HTTP POST──> Server (SvelteKit API route)
 ## One-Line Summary
 
 ```
-Browser (Phone 1) ──HTTP──> SvelteKit (Server) ──ADB WiFi──> Android (Phone 2)
+Browser (Phone 1) ──HTTP──> SvelteKit (Laptop) ──ADB WiFi──> Android (Phone 2)
                                   │
                                   ├──HTTPS──> LLM API (cloud) for decisions
                                   │
