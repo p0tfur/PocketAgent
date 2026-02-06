@@ -10,7 +10,7 @@ Android Action Kernel — an AI agent that controls Android devices through the 
 
 ## Commands
 
-All commands run from `android-action-kernel/`:
+All commands run from the project root:
 
 ```bash
 bun install                    # Install dependencies
@@ -23,7 +23,7 @@ There are no tests currently.
 
 ## Architecture
 
-Six source files in `android-action-kernel/src/`, no subdirectories:
+Seven source files in `src/`, no subdirectories:
 
 - **kernel.ts** — Entry point and main agent loop. Reads goal from stdin, runs up to MAX_STEPS iterations of: capture screen → diff with previous → call LLM → execute action → track history. Handles stuck-loop detection and vision fallback when the accessibility tree is empty.
 - **actions.ts** — 15 action implementations (tap, type, enter, swipe, home, back, wait, done, longpress, screenshot, launch, clear, clipboard_get, clipboard_set, shell). Each wraps ADB commands via `Bun.spawnSync()`. `runAdbCommand()` provides exponential backoff retry.
