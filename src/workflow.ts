@@ -5,7 +5,7 @@
  * This is DroidClaw's equivalent of `analyze_and_act(sub_goal, app)`.
  *
  * Usage:
- *   bun run src/kernel.ts --workflow examples/logistics-workflow.json
+ *   bun run src/kernel.ts --workflow examples/workflows/productivity/logistics-workflow.json
  */
 
 import { runAgent } from "./kernel.js";
