@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>droidclaw - ai agent for android</title>
   <meta name="description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
+  <meta name="author" content="thisux">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index, follow">
+
+  <!-- open graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="droidclaw - ai agent for android">
+  <meta property="og:description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
+  <meta property="og:url" content="https://github.com/thisuxhq/droidclaw">
+  <meta property="og:site_name" content="droidclaw">
+
+  <!-- twitter card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="droidclaw - ai agent for android">
+  <meta name="twitter:description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
+
+  <link rel="canonical" href="https://github.com/thisuxhq/droidclaw">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
@@ -35,6 +53,7 @@
       --indigo: #818cf8;
       --coral: #f97066;
       --lime: #a3e635;
+      --highlight: #c8c8c8;
       --radius: 12px;
       --max-w: 960px;
       --max-w-narrow: 680px;
@@ -67,12 +86,12 @@
     nav .links { display: flex; gap: 20px; align-items: center; }
     nav .links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; transition: color .15s; }
     nav .links a:hover { color: var(--text); }
-    nav .gh-btn {
+    nav .links a.gh-btn {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--text); color: var(--bg); font-weight: 600; font-size: 13px;
       padding: 6px 14px; border-radius: 6px; text-decoration: none; transition: opacity .15s;
     }
-    nav .gh-btn:hover { opacity: .85; text-decoration: none; }
+    nav .links a.gh-btn:hover { opacity: .85; color: var(--bg); text-decoration: none; }
     .menu-toggle {
       display: none; background: none; border: 1px solid var(--border); border-radius: 6px;
       color: var(--text); padding: 6px 8px; cursor: pointer; line-height: 0;
@@ -167,7 +186,7 @@
     .pipeline-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
     .pipeline-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
     .pipeline-step:hover { border-color: var(--border-hover); }
-    .pipeline-step iconify-icon { font-size: 24px; margin-bottom: 12px; display: block; }
+    .pipeline-step iconify-icon { font-size: 24px; margin-bottom: 12px; display: block; width: fit-content; }
     .pipeline-step h3 { margin-bottom: 8px; font-size: 14px; font-weight: 600; }
     .pipeline-step p { font-size: 13px; line-height: 1.55; color: var(--text-muted); margin: 0; }
 
@@ -215,7 +234,7 @@
     }
     .bento-card:hover { border-color: var(--border-hover); }
     .bento-card.wide { grid-column: 1 / -1; }
-    .bento-card iconify-icon.bento-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+    .bento-card iconify-icon.bento-icon { font-size: 28px; margin-bottom: 16px; display: block; width: fit-content; }
     .bento-card h3 { font-size: 16px; margin-bottom: 8px; }
     .bento-card p { font-size: 14px; color: var(--text-secondary); margin: 0; line-height: 1.65; }
     .bento-card pre {
@@ -368,7 +387,7 @@
 <!-- ─── nav ─── -->
 <nav>
   <div class="inner">
-    <a href="#" class="logo">droidclaw <span>experimental</span></a>
+    <a href="#" class="logo">droidclaw</a>
     <button class="menu-toggle" onclick="document.querySelector('.links').classList.toggle('open')" aria-label="Menu">
       <iconify-icon icon="ph:list-duotone" width="20" height="20"></iconify-icon>
     </button>
@@ -557,12 +576,12 @@ name: Send WhatsApp Message
       <div class="bento-card wide">
         <iconify-icon class="bento-icon" icon="ph:robot-duotone" style="color:var(--purple)"></iconify-icon>
         <h3>delegate to ai apps on-device</h3>
-        <p>open google's ai mode, ask a question, grab the answer, forward it to whatsapp. or ask chatgpt something and share the response to slack. the agent uses apps on your phone as tools - no api keys for those services needed.</p>
+        <p>open <strong style="color:var(--highlight)">google's ai mode</strong>, ask a question, grab the answer, forward it to <strong style="color:var(--highlight)">whatsapp</strong>. or ask <strong style="color:var(--highlight)">chatgpt</strong> something and share the response to <strong style="color:var(--highlight)">slack</strong>. the agent uses apps on your phone as tools - <strong style="color:var(--highlight)">no api keys</strong> for those services needed.</p>
       </div>
       <div class="bento-card">
         <iconify-icon class="bento-icon" icon="ph:globe-duotone" style="color:var(--cyan)"></iconify-icon>
         <h3>remote control with tailscale</h3>
-        <p>install tailscale on phone + laptop. connect adb over the tailnet. your phone is now a remote agent - control it from anywhere. run workflows from a cron job at 8am every morning.</p>
+        <p>install <strong style="color:var(--highlight)">tailscale</strong> on phone + laptop. connect <strong style="color:var(--highlight)">adb over the tailnet</strong>. your phone is now a <strong style="color:var(--highlight)">remote agent</strong> - control it from anywhere. run workflows from a <strong style="color:var(--highlight)">cron job</strong> at 8am every morning.</p>
 <pre># from anywhere:
 adb connect &lt;phone-tailscale-ip&gt;:5555
 bun run src/kernel.ts --workflow morning.json</pre>
@@ -570,12 +589,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
       <div class="bento-card">
         <iconify-icon class="bento-icon" icon="ph:device-mobile-duotone" style="color:var(--coral)"></iconify-icon>
         <h3>old phones, always on</h3>
-        <p>that android in a drawer can now send standups to slack, check flight prices, digest telegram channels, forward weather to whatsapp. it runs apps that don't have apis.</p>
+        <p>that android in a drawer can now send <strong style="color:var(--highlight)">standups to slack</strong>, check <strong style="color:var(--highlight)">flight prices</strong>, digest <strong style="color:var(--highlight)">telegram channels</strong>, forward <strong style="color:var(--highlight)">weather to whatsapp</strong>. it runs apps that <strong style="color:var(--highlight)">don't have apis</strong>.</p>
       </div>
       <div class="bento-card wide">
         <iconify-icon class="bento-icon" icon="ph:sparkle-duotone" style="color:var(--amber)"></iconify-icon>
         <h3>automation with ai intelligence</h3>
-        <p>unlike predefined button flows, the agent actually thinks. if a button moves, a popup appears, or the layout changes - it adapts. it reads the screen, understands context, and makes decisions.</p>
+        <p>unlike predefined button flows, the agent <strong style="color:var(--highlight)">actually thinks</strong>. if a button moves, a popup appears, or the layout changes - <strong style="color:var(--highlight)">it adapts</strong>. it reads the screen, <strong style="color:var(--highlight)">understands context</strong>, and <strong style="color:var(--highlight)">makes decisions</strong>.</p>
       </div>
     </div>
   </div>
@@ -597,12 +616,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>messaging</h3>
         </div>
         <ul>
-          <li>send <strong style="color:var(--text)">whatsapp</strong> to saved or unsaved numbers</li>
-          <li>reply to latest <strong style="color:var(--text)">sms</strong></li>
-          <li>compose emails via <strong style="color:var(--text)">gmail</strong></li>
-          <li><strong style="color:var(--text)">telegram</strong> messages to groups</li>
-          <li>post standups to <strong style="color:var(--text)">slack</strong></li>
-          <li>broadcast to <strong style="color:var(--text)">multiple contacts</strong></li>
+          <li>send <strong style="color:var(--highlight)">whatsapp</strong> to saved or unsaved numbers</li>
+          <li>reply to latest <strong style="color:var(--highlight)">sms</strong></li>
+          <li>compose emails via <strong style="color:var(--highlight)">gmail</strong></li>
+          <li><strong style="color:var(--highlight)">telegram</strong> messages to groups</li>
+          <li>post standups to <strong style="color:var(--highlight)">slack</strong></li>
+          <li>broadcast to <strong style="color:var(--highlight)">multiple contacts</strong></li>
         </ul>
       </div>
       <div class="usecase-card">
@@ -611,12 +630,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>research</h3>
         </div>
         <ul>
-          <li>search <strong style="color:var(--text)">google</strong>, collect results</li>
-          <li>ask <strong style="color:var(--text)">chatgpt / gemini</strong>, grab answer</li>
-          <li>check <strong style="color:var(--text)">weather, stocks, flights</strong></li>
-          <li>compare <strong style="color:var(--text)">prices</strong> across apps</li>
-          <li>translate via <strong style="color:var(--text)">google translate</strong></li>
-          <li>compile <strong style="color:var(--text)">multi-source digests</strong></li>
+          <li>search <strong style="color:var(--highlight)">google</strong>, collect results</li>
+          <li>ask <strong style="color:var(--highlight)">chatgpt / gemini</strong>, grab answer</li>
+          <li>check <strong style="color:var(--highlight)">weather, stocks, flights</strong></li>
+          <li>compare <strong style="color:var(--highlight)">prices</strong> across apps</li>
+          <li>translate via <strong style="color:var(--highlight)">google translate</strong></li>
+          <li>compile <strong style="color:var(--highlight)">multi-source digests</strong></li>
         </ul>
       </div>
       <div class="usecase-card">
@@ -625,12 +644,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>social</h3>
         </div>
         <ul>
-          <li>post to <strong style="color:var(--text)">instagram, twitter/x</strong></li>
-          <li><strong style="color:var(--text)">like and comment</strong> on posts</li>
-          <li>check <strong style="color:var(--text)">engagement metrics</strong></li>
-          <li>save <strong style="color:var(--text)">youtube</strong> to watch later</li>
+          <li>post to <strong style="color:var(--highlight)">instagram, twitter/x</strong></li>
+          <li><strong style="color:var(--highlight)">like and comment</strong> on posts</li>
+          <li>check <strong style="color:var(--highlight)">engagement metrics</strong></li>
+          <li>save <strong style="color:var(--highlight)">youtube</strong> to watch later</li>
           <li>follow / unfollow accounts</li>
-          <li>check <strong style="color:var(--text)">linkedin</strong> notifications</li>
+          <li>check <strong style="color:var(--highlight)">linkedin</strong> notifications</li>
         </ul>
       </div>
       <div class="usecase-card">
@@ -639,12 +658,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>productivity</h3>
         </div>
         <ul>
-          <li><strong style="color:var(--text)">morning briefing</strong> across apps</li>
-          <li>create <strong style="color:var(--text)">calendar events</strong></li>
-          <li>capture notes in <strong style="color:var(--text)">google keep</strong></li>
-          <li>check <strong style="color:var(--text)">github</strong> pull requests</li>
-          <li>set <strong style="color:var(--text)">alarms and reminders</strong></li>
-          <li>triage <strong style="color:var(--text)">notifications</strong></li>
+          <li><strong style="color:var(--highlight)">morning briefing</strong> across apps</li>
+          <li>create <strong style="color:var(--highlight)">calendar events</strong></li>
+          <li>capture notes in <strong style="color:var(--highlight)">google keep</strong></li>
+          <li>check <strong style="color:var(--highlight)">github</strong> pull requests</li>
+          <li>set <strong style="color:var(--highlight)">alarms and reminders</strong></li>
+          <li>triage <strong style="color:var(--highlight)">notifications</strong></li>
         </ul>
       </div>
       <div class="usecase-card">
@@ -653,12 +672,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>lifestyle</h3>
         </div>
         <ul>
-          <li>order food from <strong style="color:var(--text)">delivery apps</strong></li>
-          <li>book an <strong style="color:var(--text)">uber</strong> ride</li>
-          <li>play songs on <strong style="color:var(--text)">spotify</strong></li>
-          <li>check commute on <strong style="color:var(--text)">maps</strong></li>
-          <li>log <strong style="color:var(--text)">workouts</strong>, track expenses</li>
-          <li>toggle <strong style="color:var(--text)">do not disturb</strong></li>
+          <li>order food from <strong style="color:var(--highlight)">delivery apps</strong></li>
+          <li>book an <strong style="color:var(--highlight)">uber</strong> ride</li>
+          <li>play songs on <strong style="color:var(--highlight)">spotify</strong></li>
+          <li>check commute on <strong style="color:var(--highlight)">maps</strong></li>
+          <li>log <strong style="color:var(--highlight)">workouts</strong>, track expenses</li>
+          <li>toggle <strong style="color:var(--highlight)">do not disturb</strong></li>
         </ul>
       </div>
       <div class="usecase-card">
@@ -667,12 +686,12 @@ bun run src/kernel.ts --workflow morning.json</pre>
           <h3>device control</h3>
         </div>
         <ul>
-          <li>toggle <strong style="color:var(--text)">wifi, bluetooth, airplane</strong></li>
-          <li>adjust <strong style="color:var(--text)">brightness, volume</strong></li>
-          <li><strong style="color:var(--text)">force stop</strong> or clear cache</li>
-          <li>grant/revoke <strong style="color:var(--text)">permissions</strong></li>
-          <li><strong style="color:var(--text)">install/uninstall</strong> apps</li>
-          <li>run any <strong style="color:var(--text)">adb shell</strong> command</li>
+          <li>toggle <strong style="color:var(--highlight)">wifi, bluetooth, airplane</strong></li>
+          <li>adjust <strong style="color:var(--highlight)">brightness, volume</strong></li>
+          <li><strong style="color:var(--highlight)">force stop</strong> or clear cache</li>
+          <li>grant/revoke <strong style="color:var(--highlight)">permissions</strong></li>
+          <li><strong style="color:var(--highlight)">install/uninstall</strong> apps</li>
+          <li>run any <strong style="color:var(--highlight)">adb shell</strong> command</li>
         </ul>
       </div>
     </div>
@@ -692,34 +711,34 @@ bun run src/kernel.ts --workflow morning.json</pre>
       <div class="limit-col">
         <h3><iconify-icon icon="ph:check-circle-duotone" style="color:var(--green)"></iconify-icon> works well</h3>
         <ul>
-          <li><strong style="color:var(--text)">native android apps</strong> with standard ui</li>
-          <li><strong style="color:var(--text)">multi-app workflows</strong> that chain goals</li>
-          <li>device settings via <strong style="color:var(--text)">shell commands</strong></li>
-          <li><strong style="color:var(--text)">text input</strong>, navigation, taps</li>
-          <li><strong style="color:var(--text)">stuck detection</strong> + recovery</li>
-          <li><strong style="color:var(--text)">vision fallback</strong> for empty trees</li>
+          <li><strong style="color:var(--highlight)">native android apps</strong> with standard ui</li>
+          <li><strong style="color:var(--highlight)">multi-app workflows</strong> that chain goals</li>
+          <li>device settings via <strong style="color:var(--highlight)">shell commands</strong></li>
+          <li><strong style="color:var(--highlight)">text input</strong>, navigation, taps</li>
+          <li><strong style="color:var(--highlight)">stuck detection</strong> + recovery</li>
+          <li><strong style="color:var(--highlight)">vision fallback</strong> for empty trees</li>
         </ul>
       </div>
       <div class="limit-col">
         <h3><iconify-icon icon="ph:warning-duotone" style="color:var(--yellow)"></iconify-icon> unreliable</h3>
         <ul>
-          <li><strong style="color:var(--text)">flutter, react native</strong>, games</li>
-          <li><strong style="color:var(--text)">webviews</strong> (incomplete tree)</li>
-          <li><strong style="color:var(--text)">drag & drop</strong>, multi-finger</li>
-          <li><strong style="color:var(--text)">notification</strong> interaction</li>
-          <li><strong style="color:var(--text)">clipboard</strong> on android 12+</li>
-          <li><strong style="color:var(--text)">captchas</strong> and bot detection</li>
+          <li><strong style="color:var(--highlight)">flutter, react native</strong>, games</li>
+          <li><strong style="color:var(--highlight)">webviews</strong> (incomplete tree)</li>
+          <li><strong style="color:var(--highlight)">drag & drop</strong>, multi-finger</li>
+          <li><strong style="color:var(--highlight)">notification</strong> interaction</li>
+          <li><strong style="color:var(--highlight)">clipboard</strong> on android 12+</li>
+          <li><strong style="color:var(--highlight)">captchas</strong> and bot detection</li>
         </ul>
       </div>
       <div class="limit-col">
         <h3><iconify-icon icon="ph:x-circle-duotone" style="color:var(--red)"></iconify-icon> can't do</h3>
         <ul>
-          <li><strong style="color:var(--text)">banking apps</strong> (FLAG_SECURE)</li>
-          <li><strong style="color:var(--text)">biometrics</strong> (fingerprint, face)</li>
-          <li>bypass <strong style="color:var(--text)">encrypted lock screen</strong></li>
-          <li>access other apps' <strong style="color:var(--text)">private data</strong></li>
-          <li><strong style="color:var(--text)">audio or camera</strong> streams</li>
-          <li><strong style="color:var(--text)">pinch-to-zoom</strong> gestures</li>
+          <li><strong style="color:var(--highlight)">banking apps</strong> (FLAG_SECURE)</li>
+          <li><strong style="color:var(--highlight)">biometrics</strong> (fingerprint, face)</li>
+          <li>bypass <strong style="color:var(--highlight)">encrypted lock screen</strong></li>
+          <li>access other apps' <strong style="color:var(--highlight)">private data</strong></li>
+          <li><strong style="color:var(--highlight)">audio or camera</strong> streams</li>
+          <li><strong style="color:var(--highlight)">pinch-to-zoom</strong> gestures</li>
         </ul>
       </div>
     </div>
@@ -788,13 +807,13 @@ bun run src/kernel.ts</pre>
 <!-- ─── examples ─── -->
 <section id="examples">
   <div class="wrap-narrow">
-    <div class="section-label"><iconify-icon icon="ph:folder-open-duotone"></iconify-icon> examples</div>
-    <h2>35 workflows + 5 flows</h2>
+    <div class="section-label" style="color:var(--purple)"><iconify-icon icon="ph:folder-open-duotone"></iconify-icon> examples</div>
+    <h2><iconify-icon icon="ph:file-code-duotone" width="24" height="24" style="color:var(--accent); vertical-align:-3px"></iconify-icon> 35 workflows + <iconify-icon icon="ph:play-duotone" width="24" height="24" style="color:var(--lime); vertical-align:-3px"></iconify-icon> 5 flows</h2>
     <p class="section-desc" style="margin-bottom: 24px;">ready to use. workflows are ai-powered (json), flows are deterministic (yaml).</p>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:chat-circle-dots-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:chat-circle-dots-duotone" style="color:var(--green)"></iconify-icon>
         messaging <span class="count">10 workflows</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -816,7 +835,7 @@ bun run src/kernel.ts</pre>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:share-network-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:share-network-duotone" style="color:var(--purple)"></iconify-icon>
         social <span class="count">4 workflows</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -832,7 +851,7 @@ bun run src/kernel.ts</pre>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:briefcase-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:briefcase-duotone" style="color:var(--indigo)"></iconify-icon>
         productivity <span class="count">8 workflows</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -852,7 +871,7 @@ bun run src/kernel.ts</pre>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:magnifying-glass-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:magnifying-glass-duotone" style="color:var(--cyan)"></iconify-icon>
         research <span class="count">6 workflows</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -870,7 +889,7 @@ bun run src/kernel.ts</pre>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:heart-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:heart-duotone" style="color:var(--pink)"></iconify-icon>
         lifestyle <span class="count">8 workflows</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -890,7 +909,7 @@ bun run src/kernel.ts</pre>
 
     <details>
       <summary>
-        <iconify-icon class="cat-icon" icon="ph:play-duotone"></iconify-icon>
+        <iconify-icon class="cat-icon" icon="ph:play-duotone" style="color:var(--lime)"></iconify-icon>
         flows <span class="count">5 deterministic</span>
         <iconify-icon class="chevron" icon="ph:caret-right-bold" width="14" height="14"></iconify-icon>
       </summary>
@@ -912,7 +931,7 @@ bun run src/kernel.ts</pre>
   <div class="wrap">
     <div class="source-grid">
       <div>
-        <div class="section-label"><iconify-icon icon="ph:code-duotone"></iconify-icon> source</div>
+        <div class="section-label" style="color:var(--cyan)"><iconify-icon icon="ph:code-duotone"></iconify-icon> source</div>
         <h2>10 files in src/</h2>
       </div>
 <pre>kernel.ts          main loop
