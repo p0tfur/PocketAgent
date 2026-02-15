@@ -254,6 +254,13 @@ this is what makes old android devices useful again - they become always-on agen
 
 **agent repeating** - stuck detection handles this. if it persists, use a better model
 
+## contributors
+
+built by [unitedby.ai](https://unitedby.ai) — an open ai community
+
+- [sanju sivalingam](https://sanju.sh)
+- [somasundaram mahesh](https://msomu.com)
+
 ## acknowledgements
 
 droidclaw's workflow orchestration was influenced by [android action kernel](https://github.com/Action-State-Labs/android-action-kernel) from action state labs. we took the core idea of sub-goal decomposition and built a different system around it — with stuck recovery, 22 actions, multi-step skills, and vision fallback.

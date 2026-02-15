@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>droidclaw - ai agent for android</title>
   <meta name="description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
-  <meta name="author" content="thisux">
+  <meta name="author" content="unitedby.ai">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="index, follow">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="droidclaw - ai agent for android">
   <meta property="og:description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
-  <meta property="og:url" content="https://github.com/thisuxhq/droidclaw">
+  <meta property="og:url" content="https://github.com/unitedbyai/droidclaw">
   <meta property="og:site_name" content="droidclaw">
 
   <!-- twitter card -->
@@ -22,7 +22,7 @@
   <meta name="twitter:title" content="droidclaw - ai agent for android">
   <meta name="twitter:description" content="turn old android phones into ai agents. give it a goal in plain english - it figures out what to tap, type, and swipe.">
 
-  <link rel="canonical" href="https://github.com/thisuxhq/droidclaw">
+  <link rel="canonical" href="https://github.com/unitedbyai/droidclaw">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
@@ -378,7 +378,8 @@
       }
       nav .links.open { display: flex; }
       nav .links a { font-size: 14px; padding: 4px 0; }
-      nav .gh-btn { align-self: flex-start; }
+      nav .links { align-items: center; }
+      nav .links a.gh-btn { align-self: center; }
     }
   </style>
 </head>
@@ -395,7 +396,7 @@
       <a href="#how-it-works" onclick="this.parentElement.classList.remove('open')">how it works</a>
       <a href="#possibilities" onclick="this.parentElement.classList.remove('open')">possibilities</a>
       <a href="#getting-started" onclick="this.parentElement.classList.remove('open')">setup</a>
-      <a href="https://github.com/thisuxhq/droidclaw" class="gh-btn">
+      <a href="https://github.com/unitedbyai/droidclaw" class="gh-btn">
         <iconify-icon icon="ph:github-logo-duotone" width="16" height="16"></iconify-icon> GitHub
       </a>
     </div>
@@ -415,7 +416,7 @@
       <a href="#getting-started" class="btn-primary">
         <iconify-icon icon="ph:rocket-launch-duotone" width="16" height="16"></iconify-icon> get started
       </a>
-      <a href="https://github.com/thisuxhq/droidclaw" class="btn-secondary">
+      <a href="https://github.com/unitedbyai/droidclaw" class="btn-secondary">
         <iconify-icon icon="ph:github-logo-duotone" width="16" height="16"></iconify-icon> view source
       </a>
     </div>
@@ -757,7 +758,7 @@ bun run src/kernel.ts --workflow morning.json</pre>
       <div class="stepper-step">
         <span class="stepper-num">1</span>
         <h3>clone and install</h3>
-<pre>git clone https://github.com/thisuxhq/droidclaw.git
+<pre>git clone https://github.com/unitedbyai/droidclaw.git
 cd droidclaw && bun install
 cp .env.example .env</pre>
       </div>
@@ -819,16 +820,16 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/slack-standup.json">slack-standup</a> <span class="desc">- post daily standup</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/whatsapp-broadcast.json">whatsapp-broadcast</a> <span class="desc">- message multiple contacts</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/telegram-send-message.json">telegram-send-message</a> <span class="desc">- send telegram message</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/email-reply.json">email-reply</a> <span class="desc">- draft and send email</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/whatsapp-to-email.json">whatsapp-to-email</a> <span class="desc">- forward to email</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/slack-check-messages.json">slack-check-messages</a> <span class="desc">- read unread messages</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/email-digest.json">email-digest</a> <span class="desc">- summarise emails</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/telegram-channel-digest.json">telegram-channel-digest</a> <span class="desc">- digest a channel</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/whatsapp-reply.json">whatsapp-reply</a> <span class="desc">- reply to a message</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/messaging/send-whatsapp-vi.json">send-whatsapp-vi</a> <span class="desc">- send to specific contact</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/slack-standup.json">slack-standup</a> <span class="desc">- post daily standup</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/whatsapp-broadcast.json">whatsapp-broadcast</a> <span class="desc">- message multiple contacts</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/telegram-send-message.json">telegram-send-message</a> <span class="desc">- send telegram message</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/email-reply.json">email-reply</a> <span class="desc">- draft and send email</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/whatsapp-to-email.json">whatsapp-to-email</a> <span class="desc">- forward to email</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/slack-check-messages.json">slack-check-messages</a> <span class="desc">- read unread messages</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/email-digest.json">email-digest</a> <span class="desc">- summarise emails</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/telegram-channel-digest.json">telegram-channel-digest</a> <span class="desc">- digest a channel</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/whatsapp-reply.json">whatsapp-reply</a> <span class="desc">- reply to a message</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/messaging/send-whatsapp-vi.json">send-whatsapp-vi</a> <span class="desc">- send to specific contact</span></li>
         </ul>
       </div>
     </details>
@@ -841,10 +842,10 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/social/social-media-post.json">social-media-post</a> <span class="desc">- post across platforms</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/social/social-media-engage.json">social-media-engage</a> <span class="desc">- like/comment on posts</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/social/instagram-post-check.json">instagram-post-check</a> <span class="desc">- check recent posts</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/social/youtube-watch-later.json">youtube-watch-later</a> <span class="desc">- save videos</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/social/social-media-post.json">social-media-post</a> <span class="desc">- post across platforms</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/social/social-media-engage.json">social-media-engage</a> <span class="desc">- like/comment on posts</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/social/instagram-post-check.json">instagram-post-check</a> <span class="desc">- check recent posts</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/social/youtube-watch-later.json">youtube-watch-later</a> <span class="desc">- save videos</span></li>
         </ul>
       </div>
     </details>
@@ -857,14 +858,14 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/morning-briefing.json">morning-briefing</a> <span class="desc">- messages, calendar, weather</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/github-check-prs.json">github-check-prs</a> <span class="desc">- check pull requests</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/calendar-create-event.json">calendar-create-event</a> <span class="desc">- create event</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/notes-capture.json">notes-capture</a> <span class="desc">- capture a note</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/notification-cleanup.json">notification-cleanup</a> <span class="desc">- triage notifications</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/screenshot-share-slack.json">screenshot-share-slack</a> <span class="desc">- screenshot to slack</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/translate-and-reply.json">translate-and-reply</a> <span class="desc">- translate and reply</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/productivity/logistics-workflow.json">logistics-workflow</a> <span class="desc">- multi-app coordination</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/morning-briefing.json">morning-briefing</a> <span class="desc">- messages, calendar, weather</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/github-check-prs.json">github-check-prs</a> <span class="desc">- check pull requests</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/calendar-create-event.json">calendar-create-event</a> <span class="desc">- create event</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/notes-capture.json">notes-capture</a> <span class="desc">- capture a note</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/notification-cleanup.json">notification-cleanup</a> <span class="desc">- triage notifications</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/screenshot-share-slack.json">screenshot-share-slack</a> <span class="desc">- screenshot to slack</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/translate-and-reply.json">translate-and-reply</a> <span class="desc">- translate and reply</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/productivity/logistics-workflow.json">logistics-workflow</a> <span class="desc">- multi-app coordination</span></li>
         </ul>
       </div>
     </details>
@@ -877,12 +878,12 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/weather-to-whatsapp.json">weather-to-whatsapp</a> <span class="desc">- weather via ai mode to whatsapp</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/multi-app-research.json">multi-app-research</a> <span class="desc">- research across apps</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/price-comparison.json">price-comparison</a> <span class="desc">- compare prices</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/news-roundup.json">news-roundup</a> <span class="desc">- collect news</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/google-search-report.json">google-search-report</a> <span class="desc">- search and save</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/research/check-flight-status.json">check-flight-status</a> <span class="desc">- flight status</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/weather-to-whatsapp.json">weather-to-whatsapp</a> <span class="desc">- weather via ai mode to whatsapp</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/multi-app-research.json">multi-app-research</a> <span class="desc">- research across apps</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/price-comparison.json">price-comparison</a> <span class="desc">- compare prices</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/news-roundup.json">news-roundup</a> <span class="desc">- collect news</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/google-search-report.json">google-search-report</a> <span class="desc">- search and save</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/research/check-flight-status.json">check-flight-status</a> <span class="desc">- flight status</span></li>
         </ul>
       </div>
     </details>
@@ -895,14 +896,14 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/food-order.json">food-order</a> <span class="desc">- order food</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/uber-ride.json">uber-ride</a> <span class="desc">- book a ride</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/spotify-playlist.json">spotify-playlist</a> <span class="desc">- create/add playlist</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/maps-commute.json">maps-commute</a> <span class="desc">- check commute</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/fitness-log.json">fitness-log</a> <span class="desc">- log workout</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/expense-tracker.json">expense-tracker</a> <span class="desc">- log expense</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/wifi-password-share.json">wifi-password-share</a> <span class="desc">- share wifi</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/workflows/lifestyle/do-not-disturb.json">do-not-disturb</a> <span class="desc">- toggle dnd</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/food-order.json">food-order</a> <span class="desc">- order food</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/uber-ride.json">uber-ride</a> <span class="desc">- book a ride</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/spotify-playlist.json">spotify-playlist</a> <span class="desc">- create/add playlist</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/maps-commute.json">maps-commute</a> <span class="desc">- check commute</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/fitness-log.json">fitness-log</a> <span class="desc">- log workout</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/expense-tracker.json">expense-tracker</a> <span class="desc">- log expense</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/wifi-password-share.json">wifi-password-share</a> <span class="desc">- share wifi</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/workflows/lifestyle/do-not-disturb.json">do-not-disturb</a> <span class="desc">- toggle dnd</span></li>
         </ul>
       </div>
     </details>
@@ -915,11 +916,11 @@ bun run src/kernel.ts</pre>
       </summary>
       <div class="details-body">
         <ul class="example-links">
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/flows/send-whatsapp.yaml">send-whatsapp</a> <span class="desc">- send a message</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/flows/google-search.yaml">google-search</a> <span class="desc">- run a search</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/flows/create-contact.yaml">create-contact</a> <span class="desc">- add a contact</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/flows/clear-notifications.yaml">clear-notifications</a> <span class="desc">- clear all</span></li>
-          <li><a href="https://github.com/thisuxhq/droidclaw/blob/main/examples/flows/toggle-wifi.yaml">toggle-wifi</a> <span class="desc">- toggle wifi</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/flows/send-whatsapp.yaml">send-whatsapp</a> <span class="desc">- send a message</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/flows/google-search.yaml">google-search</a> <span class="desc">- run a search</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/flows/create-contact.yaml">create-contact</a> <span class="desc">- add a contact</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/flows/clear-notifications.yaml">clear-notifications</a> <span class="desc">- clear all</span></li>
+          <li><a href="https://github.com/unitedbyai/droidclaw/blob/main/examples/flows/toggle-wifi.yaml">toggle-wifi</a> <span class="desc">- toggle wifi</span></li>
         </ul>
       </div>
     </details>
@@ -952,8 +953,8 @@ logger.ts          session logging</pre>
 <footer>
   <div class="wrap">
     <p>
-      <a href="https://github.com/thisuxhq/droidclaw"><iconify-icon icon="ph:github-logo-duotone" width="14" height="14" style="vertical-align:-2px"></iconify-icon> github</a>
-      &nbsp;&middot;&nbsp; mit license &nbsp;&middot;&nbsp; built by <a href="https://thisux.com">thisux</a>
+      <a href="https://github.com/unitedbyai/droidclaw"><iconify-icon icon="ph:github-logo-duotone" width="14" height="14" style="vertical-align:-2px"></iconify-icon> github</a>
+      &nbsp;&middot;&nbsp; mit license &nbsp;&middot;&nbsp; built by <a href="https://unitedby.ai">unitedby.ai</a>
     </p>
   </div>
 </footer>
