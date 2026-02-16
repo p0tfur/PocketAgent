@@ -3,7 +3,7 @@
   "steps": [
     {
       "app": "com.google.android.apps.bard",
-      "goal": "Gemini app is now open. Find the text input field and type exactly: 'tell me more about droidclaw.ai' — then tap the send/submit button. Wait for the full response to load completely. Do NOT mark done until you can see the AI has generated a response with actual text content on screen.",
+      "goal": "Gemini app is now open. Find the text input field and type exactly: 'tell me more about droidclaw.ai' — then look for the send icon button which is located next to the 'fast' button at the bottom of the input area. Tap that send icon to submit the query. Do NOT press enter — you MUST tap the send icon. Wait for the full response to load completely. Do NOT mark done until you can see the AI has generated a response with actual text content on screen.",
       "maxSteps": 10
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "app": "com.whatsapp",
-      "goal": "WhatsApp is now open showing the chat list. Look for a contact or chat named 'vi' or 'Vi' in the visible chat list. If you can see it, tap on it to open that chat. If 'vi' is NOT visible in the chat list, tap the search icon (magnifying glass) at the top of the screen, then type 'vi' in the search field, then tap on the matching contact result to open that chat. Do NOT mark done until you are inside the chat conversation with Vi.",
+      "goal": "WhatsApp is now open showing the chat list. Look for a contact or chat named 'vi' or 'Vi' in the visible chat list. IMPORTANT: When you find the contact, tap on the contact NAME TEXT on the right side of the row — do NOT tap on the profile picture/image on the left side. If 'vi' is NOT visible in the chat list, tap the search icon (magnifying glass) at the top of the screen, then type 'vi' in the search field, then tap on the matching contact name text (not the profile image) to open that chat. Do NOT mark done until you are inside the chat conversation with Vi.",
       "maxSteps": 10
     },
     {
