@@ -244,6 +244,107 @@ ${capabilitySummary}`;
   return { system, user };
 }
 
+/**
+ * Builds a dynamic system prompt for Stage 3 (UI Agent).
+ *
+ * Instead of listing all 23 actions every step, shows only actions
+ * relevant to the current screen state. Results in ~50 lines vs 211.
+ */
+export function buildDynamicPrompt(options: {
+  hasEditableFields: boolean;
+  hasScrollable: boolean;
+  foregroundApp?: string;
+  appHints: string;
+  isStuck: boolean;
+}): string {
+  const { hasEditableFields, hasScrollable, foregroundApp, appHints, isStuck } =
+    options;
+
+  // ── Base actions (always available) ──
+  let actions = `Navigation:
+  {"action": "tap", "coordinates": [x, y], "reason": "..."}
+  {"action": "longpress", "coordinates": [x, y], "reason": "..."}
+  {"action": "back", "reason": "Navigate back"}
+  {"action": "home", "reason": "Go to home screen"}
+  {"action": "wait", "reason": "Wait for screen to load"}
+  {"action": "done", "reason": "Task is complete"}`;
+
+  // ── Conditional actions ──
+  if (hasEditableFields) {
+    actions += `
+
+Text Input (ALWAYS include coordinates to focus the correct field):
+  {"action": "type", "coordinates": [x, y], "text": "...", "reason": "..."}
+  {"action": "clear", "reason": "Clear current text field"}
+  {"action": "enter", "reason": "Press Enter/submit"}
+  {"action": "clipboard_set", "text": "...", "reason": "Set clipboard"}
+  {"action": "paste", "coordinates": [x, y], "reason": "Paste clipboard"}`;
+  }
+
+  if (hasScrollable) {
+    actions += `
+
+Scrolling:
+  {"action": "scroll", "direction": "up|down|left|right", "reason": "Scroll to see more"}`;
+  }
+
+  // Always include app control (lightweight)
+  actions += `
+
+App Control:
+  {"action": "launch", "package": "com.app.name", "reason": "Open app"}
+  {"action": "switch_app", "package": "com.app.name", "reason": "Switch app"}`;
+
+  // Multi-step actions (always useful)
+  actions += `
+
+Multi-Step:
+  {"action": "read_screen", "reason": "Scroll through page, collect all text to clipboard"}
+  {"action": "find_and_tap", "query": "Button Label", "reason": "Find and tap element by text"}
+  {"action": "copy_visible_text", "reason": "Copy all visible text to clipboard"}`;
+
+  if (hasEditableFields) {
+    actions += `
+  {"action": "submit_message", "reason": "Find Send button and tap it"}
+  {"action": "compose_email", "query": "email@addr", "reason": "Fill email fields"}`;
+  }
+
+  // ── Build full prompt ──
+  let prompt = `You are an Android UI Agent. Achieve the sub-goal by interacting with the current screen.
+
+You receive: GOAL, FOREGROUND_APP, LAST_ACTION_RESULT, SCREEN_CONTEXT (JSON elements with coordinates), SCREEN_CHANGE.
+
+Output ONLY a valid JSON object with your next action. Include a "think" field with brief reasoning.
+
+ACTIONS:
+${actions}
+
+RULES:
+- Use coordinates from SCREEN_CONTEXT "center" field — never guess.
+- Do NOT tap elements with "enabled": false.
+- ALWAYS include "coordinates" with "type" action to focus the correct field.
+- If SCREEN_CHANGE says "NOT changed", your last action had no effect — change strategy.
+- Do NOT repeat an action that already failed.
+- Say "done" as soon as the goal is achieved.
+- COPY-PASTE: Use clipboard_set with text from SCREEN_CONTEXT (most reliable), then paste. Or just type directly.`;
+
+  if (isStuck) {
+    prompt += `
+
+STUCK RECOVERY — your current approach is NOT working:
+1. The action may have SUCCEEDED SILENTLY (copy/share/like buttons work without screen changes) — move on.
+2. Use programmatic alternatives (clipboard_set, type, launch).
+3. Try a completely different UI element or approach.
+4. Navigate away (back/home) ONLY as absolute last resort.`;
+  }
+
+  if (appHints) {
+    prompt += appHints;
+  }
+
+  return prompt;
+}
+
 // ─── Provider Implementation ────────────────────────────────────
 
 const BASE_URLS: Record<string, string> = {
