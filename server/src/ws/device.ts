@@ -3,10 +3,9 @@ import type { DeviceMessage } from "@droidclaw/shared";
 import { eq, and } from "drizzle-orm";
 import { auth } from "../auth.js";
 import { db } from "../db.js";
-import { llmConfig, device, agentSession, agentStep } from "../schema.js";
+import { llmConfig, device } from "../schema.js";
 import { sessions, type WebSocketData } from "./sessions.js";
-import { runAgentLoop } from "../agent/loop.js";
-import { preprocessGoal } from "../agent/preprocessor.js";
+import { runPipeline } from "../agent/pipeline.js";
 import type { LLMConfig } from "../agent/llm.js";
 
 /** Track running agent sessions to prevent duplicates per device */
@@ -224,77 +223,16 @@ export async function handleDeviceMessage(
         break;
       }
 
-      // Preprocess: handle simple goals directly, or extract "open X" prefix
-      let effectiveGoal = goal;
-      try {
-        const preResult = await preprocessGoal(deviceId, goal, persistentDeviceId);
-        if (preResult.handled) {
-          await new Promise((r) => setTimeout(r, 1500));
-
-          if (preResult.refinedGoal) {
-            effectiveGoal = preResult.refinedGoal;
-            sendToDevice(ws, {
-              type: "step",
-              step: 0,
-              action: preResult.command,
-              reasoning: "Preprocessor: launched app directly",
-            });
-          } else {
-            // Pure "open X" — fully handled. Persist to DB then return.
-            const sessionId = crypto.randomUUID();
-            try {
-              await db.insert(agentSession).values({
-                id: sessionId,
-                userId,
-                deviceId: persistentDeviceId,
-                goal,
-                status: "completed",
-                stepsUsed: 1,
-                completedAt: new Date(),
-              });
-              await db.insert(agentStep).values({
-                id: crypto.randomUUID(),
-                sessionId,
-                stepNumber: 1,
-                action: preResult.command ?? null,
-                reasoning: `Preprocessor: direct ${preResult.command?.type} action`,
-                result: "OK",
-              });
-            } catch (err) {
-              console.error(`[DB] Failed to save preprocessor session: ${err}`);
-            }
-
-            sendToDevice(ws, { type: "goal_started", sessionId, goal });
-            sendToDevice(ws, {
-              type: "step",
-              step: 1,
-              action: preResult.command,
-              reasoning: `Preprocessor: direct ${preResult.command?.type} action`,
-            });
-            sendToDevice(ws, { type: "goal_completed", success: true, stepsUsed: 1 });
-
-            sessions.notifyDashboard(userId, { type: "goal_completed", sessionId, success: true, stepsUsed: 1 });
-
-            console.log(`[Preprocessor] Goal handled directly: ${goal}`);
-            break;
-          }
-        }
-      } catch (err) {
-        console.warn(`[Preprocessor] Error (falling through to LLM): ${err}`);
-      }
-
-      console.log(`[Agent] Starting goal for device ${deviceId}: ${effectiveGoal}${effectiveGoal !== goal ? ` (original: ${goal})` : ""}`);
+      console.log(`[Pipeline] Starting goal for device ${deviceId}: ${goal}`);
       activeSessions.set(deviceId, goal);
 
       sendToDevice(ws, { type: "goal_started", sessionId: deviceId, goal });
 
-      // Run agent loop in background (DB persistence happens inside the loop)
-      runAgentLoop({
+      runPipeline({
         deviceId,
         persistentDeviceId,
         userId,
-        goal: effectiveGoal,
-        originalGoal: goal !== effectiveGoal ? goal : undefined,
+        goal,
         llmConfig: userLlmConfig,
         onStep(step) {
           sendToDevice(ws, {
@@ -312,13 +250,13 @@ export async function handleDeviceMessage(
             stepsUsed: result.stepsUsed,
           });
           console.log(
-            `[Agent] Completed on ${deviceId}: ${result.success ? "success" : "incomplete"} in ${result.stepsUsed} steps`
+            `[Pipeline] Completed on ${deviceId}: ${result.success ? "success" : "incomplete"} in ${result.stepsUsed} steps`
           );
         },
       }).catch((err) => {
         activeSessions.delete(deviceId);
         sendToDevice(ws, { type: "goal_failed", message: String(err) });
-        console.error(`[Agent] Error on ${deviceId}:`, err);
+        console.error(`[Pipeline] Error on ${deviceId}:`, err);
       });
 
       break;
@@ -331,7 +269,7 @@ export async function handleDeviceMessage(
     case "apps": {
       const persistentDeviceId = ws.data.persistentDeviceId;
       if (persistentDeviceId) {
-        const apps = (msg as unknown as { apps: Array<{ packageName: string; label: string }> }).apps;
+        const apps = (msg as unknown as { apps: Array<{ packageName: string; label: string; intents?: string[] }> }).apps;
         // Merge apps into existing deviceInfo
         db.update(device)
           .set({

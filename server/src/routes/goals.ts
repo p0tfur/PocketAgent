@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { eq } from "drizzle-orm";
 import { sessionMiddleware, type AuthEnv } from "../middleware/auth.js";
 import { sessions } from "../ws/sessions.js";
-import { runAgentLoop, type AgentLoopOptions } from "../agent/loop.js";
+import { runPipeline, type PipelineOptions } from "../agent/pipeline.js";
 import type { LLMConfig } from "../agent/llm.js";
 import { db } from "../db.js";
 import { llmConfig as llmConfigTable } from "../schema.js";
@@ -84,42 +84,35 @@ goals.post("/", async (c) => {
     }
   }
 
-  const options: AgentLoopOptions = {
+  const abort = new AbortController();
+
+  const pipelineOpts: PipelineOptions = {
     deviceId: device.deviceId,
     persistentDeviceId: device.persistentDeviceId,
     userId: user.id,
     goal: body.goal,
     llmConfig: llmCfg,
     maxSteps: body.maxSteps,
+    signal: abort.signal,
   };
 
-  // Create abort controller for this session
-  const abort = new AbortController();
-  options.signal = abort.signal;
-
-  // Start the agent loop in the background (fire-and-forget).
-  // The client observes progress via the /ws/dashboard WebSocket.
-  const loopPromise = runAgentLoop(options);
-
-  // Track as active until it completes
   const sessionPlaceholder = { sessionId: "pending", goal: body.goal, abort };
   activeSessions.set(trackingKey, sessionPlaceholder);
+
+  const loopPromise = runPipeline(pipelineOpts);
 
   loopPromise
     .then((result) => {
       activeSessions.delete(trackingKey);
       console.log(
-        `[Agent] Completed on ${device.deviceId}: ${result.success ? "success" : "incomplete"} in ${result.stepsUsed} steps (session ${result.sessionId})`
+        `[Pipeline] Completed on ${device.deviceId}: ${result.success ? "success" : "incomplete"} in ${result.stepsUsed} steps (resolved by ${result.resolvedBy})`
       );
     })
     .catch((err) => {
       activeSessions.delete(trackingKey);
-      console.error(`[Agent] Error on ${device.deviceId}: ${err}`);
+      console.error(`[Pipeline] Error on ${device.deviceId}: ${err}`);
     });
 
-  // We need the sessionId from the loop, but it's created inside runAgentLoop.
-  // For immediate response, generate one here and let the dashboard events carry the real one.
-  // The loop will emit goal_started with its sessionId momentarily.
   return c.json({
     deviceId: body.deviceId,
     goal: body.goal,
