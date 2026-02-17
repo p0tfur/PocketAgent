@@ -6,6 +6,9 @@ import android.content.Intent
 import android.graphics.Path
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.CalendarContract
+import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
 import com.thisux.droidclaw.model.ServerMessage
@@ -35,16 +38,17 @@ class GestureExecutor(private val service: DroidClawAccessibilityService) {
                     msg.x2 ?: 0, msg.y2 ?: 0,
                     msg.duration ?: 300
                 )
-                "launch" -> executeLaunch(msg.packageName ?: "")
+                "launch" -> executeLaunch(msg)
                 "clear" -> executeClear()
                 "clipboard_set" -> executeClipboardSet(msg.text ?: "")
                 "clipboard_get" -> executeClipboardGet()
                 "paste" -> executePaste()
                 "open_url" -> executeOpenUrl(msg.url ?: "")
-                "switch_app" -> executeLaunch(msg.packageName ?: "")
+                "switch_app" -> executeLaunch(msg)
                 "keyevent" -> executeKeyEvent(msg.code ?: 0)
-                "open_settings" -> executeOpenSettings()
+                "open_settings" -> executeOpenSettings(msg.setting)
                 "wait" -> executeWait(msg.duration ?: 1000)
+                "intent" -> executeIntent(msg)
                 else -> ActionResult(false, "Unknown action: ${msg.type}")
             }
         } catch (e: Exception) {
@@ -125,10 +129,32 @@ class GestureExecutor(private val service: DroidClawAccessibilityService) {
         return dispatchSwipeGesture(x1, y1, x2, y2, duration)
     }
 
-    private fun executeLaunch(packageName: String): ActionResult {
+    private fun executeLaunch(msg: ServerMessage): ActionResult {
+        val packageName = msg.packageName ?: ""
+        val uri = msg.intentUri
+        val extras = msg.intentExtras
+
+        // If URI is provided, use ACTION_VIEW intent (deep link / intent with data)
+        if (!uri.isNullOrEmpty()) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri)).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                if (packageName.isNotEmpty()) setPackage(packageName)
+                extras?.forEach { (k, v) -> putExtra(k, v) }
+            }
+            return try {
+                service.startActivity(intent)
+                ActionResult(true)
+            } catch (e: Exception) {
+                ActionResult(false, "Intent failed: ${e.message}")
+            }
+        }
+
+        // Standard package launch
+        if (packageName.isEmpty()) return ActionResult(false, "No package or URI provided")
         val intent = service.packageManager.getLaunchIntentForPackage(packageName)
             ?: return ActionResult(false, "Package not found: $packageName")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        extras?.forEach { (k, v) -> intent.putExtra(k, v) }
         service.startActivity(intent)
         return ActionResult(true)
     }
@@ -194,12 +220,71 @@ class GestureExecutor(private val service: DroidClawAccessibilityService) {
         }
     }
 
-    private fun executeOpenSettings(): ActionResult {
-        val intent = Intent(android.provider.Settings.ACTION_SETTINGS).apply {
+    private fun executeIntent(msg: ServerMessage): ActionResult {
+        val intentAction = msg.intentAction
+            ?: return ActionResult(false, "No intentAction provided")
+
+        val intent = Intent(intentAction).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            val uri = msg.intentUri?.let { Uri.parse(it) }
+            val mimeType = msg.intentType
+
+            when {
+                uri != null && mimeType != null -> setDataAndType(uri, mimeType)
+                uri != null -> data = uri
+                mimeType != null -> type = mimeType
+            }
+
+            msg.packageName?.let { setPackage(it) }
+
+            // Auto-detect numeric extras (needed for SET_ALARM HOUR/MINUTES etc.)
+            msg.intentExtras?.forEach { (k, v) ->
+                val intVal = v.toIntOrNull()
+                val longVal = v.toLongOrNull()
+                when {
+                    intVal != null -> putExtra(k, intVal)
+                    longVal != null -> putExtra(k, longVal)
+                    else -> putExtra(k, v)
+                }
+            }
+        }
+
+        return try {
+            service.startActivity(intent)
+            ActionResult(true)
+        } catch (e: Exception) {
+            ActionResult(false, "Intent failed: ${e.message}")
+        }
+    }
+
+    private fun executeOpenSettings(setting: String?): ActionResult {
+        val action = when (setting) {
+            "wifi" -> Settings.ACTION_WIFI_SETTINGS
+            "bluetooth" -> Settings.ACTION_BLUETOOTH_SETTINGS
+            "display" -> Settings.ACTION_DISPLAY_SETTINGS
+            "sound" -> Settings.ACTION_SOUND_SETTINGS
+            "battery" -> Intent.ACTION_POWER_USAGE_SUMMARY
+            "location" -> Settings.ACTION_LOCATION_SOURCE_SETTINGS
+            "apps" -> Settings.ACTION_APPLICATION_SETTINGS
+            "date" -> Settings.ACTION_DATE_SETTINGS
+            "accessibility" -> Settings.ACTION_ACCESSIBILITY_SETTINGS
+            "developer" -> Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS
+            "dnd" -> "android.settings.ZEN_MODE_SETTINGS"
+            "network" -> Settings.ACTION_WIRELESS_SETTINGS
+            "storage" -> Settings.ACTION_INTERNAL_STORAGE_SETTINGS
+            "security" -> Settings.ACTION_SECURITY_SETTINGS
+            else -> Settings.ACTION_SETTINGS
+        }
+        val intent = Intent(action).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        service.startActivity(intent)
-        return ActionResult(true)
+        return try {
+            service.startActivity(intent)
+            ActionResult(true)
+        } catch (e: Exception) {
+            ActionResult(false, "Settings intent failed: ${e.message}")
+        }
     }
 
     private suspend fun executeWait(duration: Int): ActionResult {

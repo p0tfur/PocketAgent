@@ -26,6 +26,7 @@ import com.thisux.droidclaw.model.AppsMessage
 import com.thisux.droidclaw.model.InstalledAppInfo
 import com.thisux.droidclaw.util.DeviceInfoHelper
 import android.content.pm.PackageManager
+import android.net.Uri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -192,11 +193,93 @@ class ConnectionService : LifecycleService() {
         val pm = packageManager
         val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
         val activities = pm.queryIntentActivities(intent, PackageManager.MATCH_ALL)
-        return activities.mapNotNull { resolveInfo ->
+        val apps = activities.mapNotNull { resolveInfo ->
             val pkg = resolveInfo.activityInfo.packageName
             val label = resolveInfo.loadLabel(pm).toString()
             InstalledAppInfo(packageName = pkg, label = label)
         }.distinctBy { it.packageName }.sortedBy { it.label.lowercase() }
+
+        // Discover intent capabilities per app
+        val intentMap = discoverIntentCapabilities()
+        return apps.map { app ->
+            val intents = intentMap[app.packageName]
+            if (intents != null) app.copy(intents = intents.toList()) else app
+        }
+    }
+
+    /**
+     * Probe installed apps to discover which URI schemes and intent actions
+     * each app supports. Returns a map of packageName -> list of capabilities.
+     * Format: "VIEW:scheme", "SENDTO:scheme", "SEND:mime", or action name.
+     */
+    private fun discoverIntentCapabilities(): Map<String, List<String>> {
+        val pm = packageManager
+        val result = mutableMapOf<String, MutableSet<String>>()
+
+        // Probe ACTION_VIEW with common URI schemes
+        val viewSchemes = listOf(
+            "tel", "sms", "smsto", "mailto", "geo", "https", "http",
+            "whatsapp", "instagram", "twitter", "fb", "spotify",
+            "vnd.youtube", "zoomus", "upi", "phonepe", "paytm",
+            "gpay", "tez", "google.navigation", "uber", "skype",
+            "viber", "telegram", "snapchat", "linkedin", "reddit",
+            "swiggy", "zomato", "ola", "maps.google.com"
+        )
+        for (scheme in viewSchemes) {
+            try {
+                val probe = Intent(Intent.ACTION_VIEW, Uri.parse("$scheme://test"))
+                val resolvers = pm.queryIntentActivities(probe, PackageManager.MATCH_DEFAULT_ONLY)
+                for (info in resolvers) {
+                    result.getOrPut(info.activityInfo.packageName) { mutableSetOf() }
+                        .add("VIEW:$scheme")
+                }
+            } catch (_: Exception) { /* skip invalid scheme */ }
+        }
+
+        // Probe ACTION_SENDTO (sms, mailto)
+        for (scheme in listOf("sms", "mailto")) {
+            try {
+                val probe = Intent(Intent.ACTION_SENDTO, Uri.parse("$scheme:test"))
+                val resolvers = pm.queryIntentActivities(probe, PackageManager.MATCH_DEFAULT_ONLY)
+                for (info in resolvers) {
+                    result.getOrPut(info.activityInfo.packageName) { mutableSetOf() }
+                        .add("SENDTO:$scheme")
+                }
+            } catch (_: Exception) {}
+        }
+
+        // Probe ACTION_SEND (share) with common MIME types
+        for (mime in listOf("text/plain", "image/*")) {
+            try {
+                val probe = Intent(Intent.ACTION_SEND).apply { type = mime }
+                val resolvers = pm.queryIntentActivities(probe, PackageManager.MATCH_DEFAULT_ONLY)
+                for (info in resolvers) {
+                    result.getOrPut(info.activityInfo.packageName) { mutableSetOf() }
+                        .add("SEND:$mime")
+                }
+            } catch (_: Exception) {}
+        }
+
+        // Probe special actions
+        val specialActions = listOf(
+            "android.intent.action.SET_ALARM",
+            "android.intent.action.SET_TIMER",
+            "android.intent.action.DIAL",
+            "android.intent.action.INSERT",
+            "android.intent.action.CALL"
+        )
+        for (action in specialActions) {
+            try {
+                val probe = Intent(action)
+                val resolvers = pm.queryIntentActivities(probe, PackageManager.MATCH_DEFAULT_ONLY)
+                for (info in resolvers) {
+                    result.getOrPut(info.activityInfo.packageName) { mutableSetOf() }
+                        .add(action)
+                }
+            } catch (_: Exception) {}
+        }
+
+        return result.mapValues { it.value.toList() }
     }
 
     private fun createNotificationChannel() {

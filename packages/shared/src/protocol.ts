@@ -20,7 +20,7 @@ export type ServerToDeviceMessage =
   | { type: "back"; requestId: string }
   | { type: "home"; requestId: string }
   | { type: "longpress"; requestId: string; x: number; y: number }
-  | { type: "launch"; requestId: string; packageName: string }
+  | { type: "launch"; requestId: string; packageName: string; intentUri?: string; intentExtras?: Record<string, string> }
   | { type: "clear"; requestId: string }
   | { type: "clipboard_set"; requestId: string; text: string }
   | { type: "clipboard_get"; requestId: string }
@@ -29,8 +29,9 @@ export type ServerToDeviceMessage =
   | { type: "switch_app"; requestId: string; packageName: string }
   | { type: "notifications"; requestId: string }
   | { type: "keyevent"; requestId: string; code: number }
-  | { type: "open_settings"; requestId: string }
+  | { type: "open_settings"; requestId: string; setting?: string }
   | { type: "wait"; requestId: string; duration?: number }
+  | { type: "intent"; requestId: string; intentAction: string; intentUri?: string; intentType?: string; intentExtras?: Record<string, string>; packageName?: string }
   | { type: "ping" }
   | { type: "goal_started"; sessionId: string; goal: string }
   | { type: "goal_completed"; sessionId: string; success: boolean; stepsUsed: number };

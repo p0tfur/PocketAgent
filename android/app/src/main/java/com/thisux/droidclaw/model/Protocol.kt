@@ -61,7 +61,8 @@ data class HeartbeatMessage(
 @Serializable
 data class InstalledAppInfo(
     val packageName: String,
-    val label: String
+    val label: String,
+    val intents: List<String> = emptyList()
 )
 
 @Serializable
@@ -94,5 +95,11 @@ data class ServerMessage(
     val text: String? = null,
     val packageName: String? = null,
     val url: String? = null,
-    val code: Int? = null
+    val code: Int? = null,
+    // Intent fields
+    val intentAction: String? = null,
+    val intentUri: String? = null,
+    val intentType: String? = null,
+    val intentExtras: Map<String, String>? = null,
+    val setting: String? = null
 )
