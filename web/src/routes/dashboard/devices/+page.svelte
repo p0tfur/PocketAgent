@@ -2,15 +2,24 @@
 	import { listDevices } from '$lib/api/devices.remote';
 	import { dashboardWs } from '$lib/stores/dashboard-ws.svelte';
 	import { onMount } from 'svelte';
+	import DeviceCard from '$lib/components/DeviceCard.svelte';
 
 	const initialDevices = await listDevices();
 
 	let devices = $state(
-		initialDevices.map((d: Record<string, string>) => ({
+		initialDevices.map((d) => ({
 			deviceId: d.deviceId,
 			name: d.name,
 			status: d.status as 'online' | 'offline',
-			lastSeen: d.lastSeen
+			model: d.model,
+			manufacturer: d.manufacturer,
+			androidVersion: d.androidVersion,
+			screenWidth: d.screenWidth,
+			screenHeight: d.screenHeight,
+			batteryLevel: d.batteryLevel,
+			isCharging: d.isCharging,
+			lastSeen: d.lastSeen,
+			lastGoal: d.lastGoal
 		}))
 	);
 
@@ -26,7 +35,20 @@
 					devices = [...devices];
 				} else {
 					devices = [
-						{ deviceId: id, name, status: 'online', lastSeen: new Date().toISOString() },
+						{
+							deviceId: id,
+							name,
+							status: 'online',
+							model: null,
+							manufacturer: null,
+							androidVersion: null,
+							screenWidth: null,
+							screenHeight: null,
+							batteryLevel: null,
+							isCharging: false,
+							lastSeen: new Date().toISOString(),
+							lastGoal: null
+						},
 						...devices
 					];
 				}
@@ -35,6 +57,14 @@
 				const existing = devices.find((d) => d.deviceId === id);
 				if (existing) {
 					existing.status = 'offline';
+					devices = [...devices];
+				}
+			} else if (msg.type === 'device_status') {
+				const id = msg.deviceId as string;
+				const existing = devices.find((d) => d.deviceId === id);
+				if (existing) {
+					existing.batteryLevel = msg.batteryLevel as number;
+					existing.isCharging = msg.isCharging as boolean;
 					devices = [...devices];
 				}
 			}
@@ -56,24 +86,9 @@
 		</a>
 	</div>
 {:else}
-	<div class="space-y-3">
+	<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 		{#each devices as d (d.deviceId)}
-			<a
-				href="/dashboard/devices/{d.deviceId}"
-				class="flex items-center justify-between rounded-lg border border-neutral-200 p-4 hover:border-neutral-400"
-			>
-				<div>
-					<p class="font-medium">{d.name}</p>
-					<p class="text-sm text-neutral-500">
-						{d.status === 'online' ? 'Connected now' : `Last seen ${new Date(d.lastSeen).toLocaleString()}`}
-					</p>
-				</div>
-				<span
-					class="inline-block h-2 w-2 rounded-full {d.status === 'online'
-						? 'bg-green-500'
-						: 'bg-neutral-300'}"
-				></span>
-			</a>
+			<DeviceCard {...d} />
 		{/each}
 	</div>
 {/if}
