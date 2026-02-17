@@ -7,6 +7,7 @@ competitor/
 logs/
 kernel_screenshot.png
 window_dump.xml
+docs/plans/
 docs/architecture-web-flow.md
 docs/INTENT.md
 OPTION1-IMPLEMENTATION.md
