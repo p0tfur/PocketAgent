@@ -23,6 +23,7 @@ data class ScreenResponse(
     val type: String = "screen",
     val requestId: String,
     val elements: List<UIElement>,
+    val screenHash: String? = null,
     val screenshot: String? = null,
     val packageName: String? = null
 )

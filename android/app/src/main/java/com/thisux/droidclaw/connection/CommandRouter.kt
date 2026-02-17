@@ -4,6 +4,7 @@ import android.util.Base64
 import android.util.Log
 import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
 import com.thisux.droidclaw.accessibility.GestureExecutor
+import com.thisux.droidclaw.accessibility.ScreenTreeBuilder
 import com.thisux.droidclaw.capture.ScreenCaptureManager
 import com.thisux.droidclaw.model.AgentStep
 import com.thisux.droidclaw.model.GoalStatus
@@ -65,6 +66,10 @@ class CommandRouter(
                 currentGoalStatus.value = if (msg.success == true) GoalStatus.Completed else GoalStatus.Failed
                 Log.i(TAG, "Goal completed: success=${msg.success}, steps=${msg.stepsUsed}")
             }
+            "goal_failed" -> {
+                currentGoalStatus.value = GoalStatus.Failed
+                Log.i(TAG, "Goal failed: ${msg.message}")
+            }
 
             else -> Log.w(TAG, "Unknown message type: ${msg.type}")
         }
@@ -86,9 +91,14 @@ class CommandRouter(
             }
         }
 
+        val screenHash = if (elements.isNotEmpty()) {
+            ScreenTreeBuilder.computeScreenHash(elements)
+        } else null
+
         val response = ScreenResponse(
             requestId = requestId,
             elements = elements,
+            screenHash = screenHash,
             screenshot = screenshot,
             packageName = packageName
         )
