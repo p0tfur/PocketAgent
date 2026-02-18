@@ -2,8 +2,23 @@
 	import { signout } from '$lib/api/auth.remote';
 	import { dashboardWs } from '$lib/stores/dashboard-ws.svelte';
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+	import Icon from '@iconify/svelte';
+	import { Toaster } from 'svelte-sonner';
 
 	let { children, data } = $props();
+
+	const navItems = [
+		{ href: '/dashboard', label: 'Overview', icon: 'ph:squares-four-duotone', exact: true },
+		{ href: '/dashboard/devices', label: 'Devices', icon: 'ph:device-mobile-duotone' },
+		{ href: '/dashboard/api-keys', label: 'API Keys', icon: 'ph:key-duotone' },
+		{ href: '/dashboard/settings', label: 'Settings', icon: 'ph:gear-duotone' }
+	];
+
+	function isActive(href: string, exact: boolean = false) {
+		if (exact) return page.url.pathname === href;
+		return page.url.pathname.startsWith(href);
+	}
 
 	onMount(() => {
 		if (data.sessionToken) {
@@ -15,17 +30,39 @@
 
 <div class="flex min-h-screen">
 	<aside class="flex w-64 flex-col border-r border-neutral-200 bg-neutral-50 p-6">
-		<h1 class="mb-8 text-xl font-bold">DroidClaw</h1>
-		<nav class="flex flex-col gap-2">
-			<a href="/dashboard" class="rounded px-3 py-2 hover:bg-neutral-200">Overview</a>
-			<a href="/dashboard/devices" class="rounded px-3 py-2 hover:bg-neutral-200">Devices</a>
-			<a href="/dashboard/api-keys" class="rounded px-3 py-2 hover:bg-neutral-200">API Keys</a>
-			<a href="/dashboard/settings" class="rounded px-3 py-2 hover:bg-neutral-200">Settings</a>
+		<div class="mb-8">
+			<h1 class="text-lg font-bold tracking-tight">DroidClaw</h1>
+		</div>
+		<nav class="flex flex-col gap-1">
+			{#each navItems as item}
+				<a
+					href={item.href}
+					class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
+						{isActive(item.href, item.exact)
+						? 'bg-neutral-200/70 text-neutral-900'
+						: 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'}"
+				>
+					<Icon
+						icon={item.icon}
+						class="h-5 w-5 {isActive(item.href, item.exact) ? 'text-neutral-700' : 'text-neutral-400'}"
+					/>
+					{item.label}
+				</a>
+			{/each}
 		</nav>
 		<div class="mt-auto pt-8">
-			<p class="mb-2 text-sm text-neutral-500">{data.user.email}</p>
+			{#if data.plan}
+				<div class="mb-3 flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2">
+					<Icon icon="ph:seal-check-duotone" class="h-4 w-4 text-emerald-600" />
+					<span class="text-xs font-semibold uppercase tracking-wide text-emerald-700">{data.plan === 'ltd' ? 'Lifetime' : data.plan}</span>
+				</div>
+			{/if}
 			<form {...signout}>
-				<button type="submit" class="text-sm text-neutral-500 hover:text-neutral-800">
+				<button
+					type="submit"
+					class="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
+				>
+					<Icon icon="ph:sign-out-duotone" class="h-5 w-5" />
 					Sign out
 				</button>
 			</form>
@@ -36,3 +73,5 @@
 		{@render children?.()}
 	</main>
 </div>
+
+<Toaster position="bottom-right" />

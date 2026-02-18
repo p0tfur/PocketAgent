@@ -51,4 +51,6 @@ export const updateConfig = form(llmConfigSchema, async (data) => {
 			model: data.model ?? null
 		});
 	}
+
+	return { saved: true };
 });

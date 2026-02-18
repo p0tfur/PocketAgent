@@ -11,6 +11,7 @@ import type { WebSocketData } from "./ws/sessions.js";
 import { devices } from "./routes/devices.js";
 import { goals } from "./routes/goals.js";
 import { health } from "./routes/health.js";
+import { license } from "./routes/license.js";
 
 const app = new Hono();
 
@@ -34,6 +35,7 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 app.route("/devices", devices);
 app.route("/goals", goals);
 app.route("/health", health);
+app.route("/license", license);
 
 // Start server with WebSocket support
 const server = Bun.serve<WebSocketData>({

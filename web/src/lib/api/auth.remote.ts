@@ -9,9 +9,10 @@ export const signup = form(signupSchema, async (user) => {
 });
 
 export const login = form(loginSchema, async (user) => {
-	const { request } = getRequestEvent();
+	const { request, url } = getRequestEvent();
 	await auth.api.signInEmail({ body: user, headers: request.headers });
-	redirect(303, '/dashboard');
+	const next = url.searchParams.get('redirect') || '/dashboard';
+	redirect(303, next);
 });
 
 export const signout = form(async () => {

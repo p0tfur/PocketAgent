@@ -3,6 +3,8 @@
 	import { dashboardWs } from '$lib/stores/dashboard-ws.svelte';
 	import { onMount } from 'svelte';
 	import DeviceCard from '$lib/components/DeviceCard.svelte';
+	import Icon from '@iconify/svelte';
+	import { toast } from '$lib/toast';
 
 	interface DeviceEntry {
 		deviceId: string;
@@ -67,12 +69,14 @@
 						...devices
 					];
 				}
+				toast.success(`${name} connected`);
 			} else if (msg.type === 'device_offline') {
 				const id = msg.deviceId as string;
 				const existing = devices.find((d) => d.deviceId === id);
 				if (existing) {
 					existing.status = 'offline';
 					devices = [...devices];
+					toast.info(`${existing.name} disconnected`);
 				}
 			} else if (msg.type === 'device_status') {
 				const id = msg.deviceId as string;
@@ -91,12 +95,19 @@
 <h2 class="mb-6 text-2xl font-bold">Devices</h2>
 
 {#if devices.length === 0}
-	<div class="rounded-lg border border-neutral-200 p-8 text-center">
-		<p class="text-neutral-500">No devices connected.</p>
-		<p class="mt-2 text-sm text-neutral-400">
+	<div class="rounded-xl border border-neutral-200 p-10 text-center">
+		<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-100">
+			<Icon icon="ph:device-mobile-slash-duotone" class="h-6 w-6 text-neutral-400" />
+		</div>
+		<p class="font-medium text-neutral-600">No devices connected</p>
+		<p class="mt-1 text-sm text-neutral-400">
 			Install the Android app, paste your API key, and your device will appear here.
 		</p>
-		<a href="/dashboard/api-keys" class="mt-4 inline-block text-sm text-blue-600 hover:underline">
+		<a
+			href="/dashboard/api-keys"
+			class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-700 hover:text-neutral-900"
+		>
+			<Icon icon="ph:key-duotone" class="h-4 w-4" />
 			Create an API key
 		</a>
 	</div>

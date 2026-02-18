@@ -10,7 +10,7 @@ export const listKeys = query(async () => {
 export const createKey = form(createKeySchema, async ({ name }) => {
 	const { request } = getRequestEvent();
 	const result = await auth.api.createApiKey({
-		body: { name, prefix: 'dc' },
+		body: { name, prefix: 'droidclaw_' },
 		headers: request.headers
 	});
 	return result;
