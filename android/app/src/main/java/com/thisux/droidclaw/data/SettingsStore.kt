@@ -26,7 +26,7 @@ class SettingsStore(private val context: Context) {
     }
 
     val serverUrl: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs[SettingsKeys.SERVER_URL] ?: "ws://localhost:8080"
+        prefs[SettingsKeys.SERVER_URL] ?: "wss://tunnel.droidclaw.ai"
     }
 
     val deviceName: Flow<String> = context.dataStore.data.map { prefs ->
