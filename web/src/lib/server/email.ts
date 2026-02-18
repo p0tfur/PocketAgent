@@ -1,11 +1,12 @@
 import { env } from '$env/dynamic/private';
 import { UseSend } from 'usesend-js';
 
-if (!env.USESEND_API_KEY) throw new Error('USESEND_API_KEY is not set');
-
-const usesend = new UseSend(env.USESEND_API_KEY);
-
 const EMAIL_FROM = 'noreply@app.droidclaw.ai';
+
+function getClient() {
+	if (!env.USESEND_API_KEY) throw new Error('USESEND_API_KEY is not set');
+	return new UseSend(env.USESEND_API_KEY, env.USESEND_BASE_URL);
+}
 
 export async function sendEmail({
 	to,
@@ -16,7 +17,8 @@ export async function sendEmail({
 	subject: string;
 	text: string;
 }) {
-	return usesend.emails.send({
+	console.log('[Email] API key prefix:', env.USESEND_API_KEY?.slice(0, 15) + '...');
+	return getClient().emails.send({
 		to,
 		from: EMAIL_FROM,
 		subject,
