@@ -7,6 +7,7 @@ import com.thisux.droidclaw.model.DeviceInfoMsg
 import com.thisux.droidclaw.model.ServerMessage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.cio.endpoint
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.websocket.Frame

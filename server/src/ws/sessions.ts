@@ -122,7 +122,8 @@ class SessionManager {
     command: Record<string, unknown>,
     timeout = DEFAULT_COMMAND_TIMEOUT
   ): Promise<unknown> {
-    const device = this.devices.get(deviceId);
+    // Try ephemeral ID first, then fall back to persistent DB ID (handles reconnects)
+    const device = this.devices.get(deviceId) ?? this.getDeviceByPersistentId(deviceId);
     if (!device) {
       return Promise.reject(new Error(`Device ${deviceId} not connected`));
     }
