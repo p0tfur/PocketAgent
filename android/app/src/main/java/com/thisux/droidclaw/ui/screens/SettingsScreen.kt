@@ -8,7 +8,9 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +18,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,16 +45,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.thisux.droidclaw.DroidClawApp
 import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
 import com.thisux.droidclaw.capture.ScreenCaptureManager
+import com.thisux.droidclaw.connection.ConnectionService
+import com.thisux.droidclaw.model.ConnectionState
+import com.thisux.droidclaw.ui.theme.StatusAmber
+import com.thisux.droidclaw.ui.theme.StatusGreen
+import com.thisux.droidclaw.ui.theme.StatusRed
 import com.thisux.droidclaw.util.BatteryOptimization
 import kotlinx.coroutines.launch
 
@@ -56,6 +69,9 @@ fun SettingsScreen() {
     val context = LocalContext.current
     val app = context.applicationContext as DroidClawApp
     val scope = rememberCoroutineScope()
+
+    val connectionState by ConnectionService.connectionState.collectAsState()
+    val errorMessage by ConnectionService.errorMessage.collectAsState()
 
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
     val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.droidclaw.ai")
@@ -74,8 +90,12 @@ fun SettingsScreen() {
         ScreenCaptureManager.restoreConsent(context)
         mutableStateOf(isCaptureAvailable || ScreenCaptureManager.hasConsent())
     }
-    var isBatteryExempt by remember { mutableStateOf(BatteryOptimization.isIgnoringBatteryOptimizations(context)) }
-    var hasOverlayPermission by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
+    var isBatteryExempt by remember {
+        mutableStateOf(BatteryOptimization.isIgnoringBatteryOptimizations(context))
+    }
+    var hasOverlayPermission by remember {
+        mutableStateOf(Settings.canDrawOverlays(context))
+    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -104,11 +124,14 @@ fun SettingsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 20.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Settings", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // --- Server Section ---
+        SectionHeader("Server")
 
         OutlinedTextField(
             value = displayApiKey,
@@ -116,7 +139,8 @@ fun SettingsScreen() {
             label = { Text("API Key") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            singleLine = true
+            singleLine = true,
+            shape = RoundedCornerShape(12.dp)
         )
         if (editingApiKey != null && editingApiKey != apiKey) {
             OutlinedButton(
@@ -125,7 +149,8 @@ fun SettingsScreen() {
                         app.settingsStore.setApiKey(displayApiKey)
                         editingApiKey = null
                     }
-                }
+                },
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Save API Key")
             }
@@ -136,7 +161,8 @@ fun SettingsScreen() {
             onValueChange = { editingServerUrl = it },
             label = { Text("Server URL") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            shape = RoundedCornerShape(12.dp)
         )
         if (editingServerUrl != null && editingServerUrl != serverUrl) {
             OutlinedButton(
@@ -145,15 +171,89 @@ fun SettingsScreen() {
                         app.settingsStore.setServerUrl(displayServerUrl)
                         editingServerUrl = null
                     }
-                }
+                },
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Save Server URL")
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        // --- Connection Section ---
+        SectionHeader("Connection")
 
-        Text("Setup Checklist", style = MaterialTheme.typography.titleMedium)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .clip(CircleShape)
+                            .background(
+                                when (connectionState) {
+                                    ConnectionState.Connected -> StatusGreen
+                                    ConnectionState.Connecting -> StatusAmber
+                                    ConnectionState.Error -> StatusRed
+                                    ConnectionState.Disconnected -> Color.Gray
+                                }
+                            )
+                    )
+                    Text(
+                        text = when (connectionState) {
+                            ConnectionState.Connected -> "Connected to server"
+                            ConnectionState.Connecting -> "Connecting..."
+                            ConnectionState.Error -> errorMessage ?: "Connection error"
+                            ConnectionState.Disconnected -> "Disconnected"
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        val intent = Intent(context, ConnectionService::class.java).apply {
+                            action = if (connectionState == ConnectionState.Disconnected || connectionState == ConnectionState.Error) {
+                                ConnectionService.ACTION_CONNECT
+                            } else {
+                                ConnectionService.ACTION_DISCONNECT
+                            }
+                        }
+                        context.startForegroundService(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (connectionState == ConnectionState.Connected || connectionState == ConnectionState.Connecting) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        }
+                    )
+                ) {
+                    Text(
+                        when (connectionState) {
+                            ConnectionState.Disconnected, ConnectionState.Error -> "Connect"
+                            else -> "Disconnect"
+                        }
+                    )
+                }
+            }
+        }
+
+        // --- Permissions Section ---
+        SectionHeader("Permissions")
 
         ChecklistItem(
             label = "API key configured",
@@ -200,7 +300,18 @@ fun SettingsScreen() {
             }
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
     }
+}
+
+@Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(top = 4.dp)
+    )
 }
 
 @Composable
@@ -212,6 +323,7 @@ private fun ChecklistItem(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isOk) {
                 MaterialTheme.colorScheme.secondaryContainer
@@ -234,12 +346,15 @@ private fun ChecklistItem(
                 Icon(
                     imageVector = if (isOk) Icons.Filled.CheckCircle else Icons.Filled.Error,
                     contentDescription = if (isOk) "OK" else "Missing",
-                    tint = if (isOk) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                    tint = if (isOk) StatusGreen else MaterialTheme.colorScheme.error
                 )
-                Text(label)
+                Text(label, style = MaterialTheme.typography.bodyMedium)
             }
             if (!isOk && actionLabel != null) {
-                OutlinedButton(onClick = onAction) {
+                OutlinedButton(
+                    onClick = onAction,
+                    shape = RoundedCornerShape(8.dp)
+                ) {
                     Text(actionLabel)
                 }
             }
