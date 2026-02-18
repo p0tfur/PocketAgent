@@ -1,12 +1,25 @@
 import type { ServerWebSocket } from "bun";
 import type { DeviceMessage } from "@droidclaw/shared";
 import { eq, and } from "drizzle-orm";
-import { auth } from "../auth.js";
 import { db } from "../db.js";
-import { llmConfig, device } from "../schema.js";
+import { apikey, llmConfig, device } from "../schema.js";
 import { sessions, type WebSocketData } from "./sessions.js";
 import { runPipeline } from "../agent/pipeline.js";
 import type { LLMConfig } from "../agent/llm.js";
+
+/**
+ * Hash an API key the same way better-auth does:
+ * SHA-256 → base64url (no padding).
+ */
+async function hashApiKey(key: string): Promise<string> {
+  const data = new TextEncoder().encode(key);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  // base64url encode without padding
+  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
 
 /** Track running agent sessions to prevent duplicates per device */
 const activeSessions = new Map<string, string>();
@@ -77,22 +90,37 @@ export async function handleDeviceMessage(
 
   if (msg.type === "auth") {
     try {
-      const result = await auth.api.verifyApiKey({
-        body: { key: msg.apiKey },
-      });
+      // Hash the incoming key and look it up directly in the DB
+      const hashedKey = await hashApiKey(msg.apiKey);
+      const rows = await db
+        .select({ id: apikey.id, userId: apikey.userId, enabled: apikey.enabled, expiresAt: apikey.expiresAt })
+        .from(apikey)
+        .where(eq(apikey.key, hashedKey))
+        .limit(1);
 
-      if (!result.valid || !result.key) {
+      if (rows.length === 0 || !rows[0].enabled) {
         ws.send(
           JSON.stringify({
             type: "auth_error",
-            message: result.error?.message ?? "Invalid API key",
+            message: "Invalid API key",
+          })
+        );
+        return;
+      }
+
+      // Check expiration
+      if (rows[0].expiresAt && rows[0].expiresAt < new Date()) {
+        ws.send(
+          JSON.stringify({
+            type: "auth_error",
+            message: "API key expired",
           })
         );
         return;
       }
 
       const deviceId = crypto.randomUUID();
-      const userId = result.key.userId;
+      const userId = rows[0].userId;
 
       // Build device name from device info
       const name = msg.deviceInfo
