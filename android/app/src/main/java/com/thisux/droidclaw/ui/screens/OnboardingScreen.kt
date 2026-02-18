@@ -233,7 +233,7 @@ private fun OnboardingStepTwo(onGetStarted: () -> Unit) {
         }
     }
 
-    val allGranted = isAccessibilityEnabled && hasCaptureConsent && hasOverlayPermission
+    val allGranted = isAccessibilityEnabled && hasCaptureConsent && isBatteryExempt && hasOverlayPermission
 
     Column(
         modifier = Modifier
