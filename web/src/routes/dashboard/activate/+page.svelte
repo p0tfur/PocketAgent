@@ -112,7 +112,7 @@
 		</div>
 
 		<a
-			href="https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_5pGavRIJJhM8ge6p0UaeaadT2bCiqL04CYXgW3bwVac/redirect"
+			href="https://buy.polar.sh/polar_cl_jCKKpL4dSdvLZr9H6JYeeCiXjTH98Rf9b4kKM2VqvG2"
 			data-umami-event={LICENSE_PURCHASE_CLICK}
 			class="flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-900 px-4 py-3 text-base font-medium text-white hover:bg-neutral-800"
 		>
