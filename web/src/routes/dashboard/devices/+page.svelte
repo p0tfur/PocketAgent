@@ -103,13 +103,22 @@
 		<p class="mt-1 text-sm text-neutral-400">
 			Install the Android app, paste your API key, and your device will appear here.
 		</p>
-		<a
-			href="/dashboard/api-keys"
-			class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-700 hover:text-neutral-900"
-		>
-			<Icon icon="ph:key-duotone" class="h-4 w-4" />
-			Create an API key
-		</a>
+		<div class="mt-4 flex flex-col items-center gap-3">
+			<a
+				href="https://github.com/unitedbyai/droidclaw/releases/download/v0.3.1/app-debug.apk"
+				class="inline-flex items-center gap-1.5 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+			>
+				<Icon icon="ph:android-logo-duotone" class="h-4 w-4" />
+				Download APK
+			</a>
+			<a
+				href="/dashboard/api-keys"
+				class="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-700"
+			>
+				<Icon icon="ph:key-duotone" class="h-4 w-4" />
+				Create an API key
+			</a>
+		</div>
 	</div>
 {:else}
 	<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">

@@ -2,6 +2,8 @@
 
 > an ai agent that controls your android phone. give it a goal in plain english — it figures out what to tap, type, and swipe.
 
+**[Download Android APK (v0.3.1)](https://github.com/unitedbyai/droidclaw/releases/download/v0.3.1/app-debug.apk)** | **[Dashboard](https://app.droidclaw.ai)** | **[Discord](https://discord.gg/nRHKQ29j)**
+
 i wanted to turn my old android devices into ai agents. after a few hours reverse engineering accessibility trees and playing with tailscale.. it worked.
 
 think of it this way — a few years back, we could automate android with predefined flows. now imagine that automation layer has an llm brain. it can read any screen, understand what's happening, decide what to do, and execute. you don't need api's. you don't need to build integrations. just install your favourite apps and tell the agent what you want done.

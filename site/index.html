@@ -422,14 +422,17 @@
 <!-- ─── hero ─── -->
 <section class="hero">
   <div class="wrap">
-    <div class="badge"><iconify-icon icon="ph:flask-duotone" width="14" height="14" style="color:var(--amber)"></iconify-icon> experimental</div>
+    <a href="https://app.droidclaw.ai" class="badge" style="text-decoration:none;cursor:pointer;transition:border-color .15s;"><iconify-icon icon="ph:rocket-launch-duotone" width="14" height="14" style="color:var(--green)"></iconify-icon> now live &mdash; sign up &amp; start controlling your device <iconify-icon icon="ph:arrow-right" width="12" height="12" style="color:var(--text-muted)"></iconify-icon></a>
     <h1>turn old phones into<br><span class="glow">ai agents</span></h1>
     <p class="subtitle">
       give it a goal in plain english. it reads the screen, thinks about what to do,
       taps and types via adb, and repeats until the job is done.
     </p>
     <div class="hero-actions">
-      <a href="#getting-started" class="btn-primary">
+      <a href="https://github.com/unitedbyai/droidclaw/releases/download/v0.3.1/app-debug.apk" class="btn-primary">
+        <iconify-icon icon="ph:android-logo-duotone" width="16" height="16"></iconify-icon> download apk
+      </a>
+      <a href="#getting-started" class="btn-secondary">
         <iconify-icon icon="ph:rocket-launch-duotone" width="16" height="16"></iconify-icon> get started
       </a>
       <a href="https://github.com/unitedbyai/droidclaw" class="btn-secondary">
@@ -816,13 +819,23 @@ GROQ_API_KEY=gsk_your_key_here
       </div>
       <div class="stepper-step">
         <span class="stepper-num">3</span>
+        <h3>install the android app</h3>
+        <p>download and install the companion app on your android device.</p>
+        <div style="margin-top: 12px;">
+          <a href="https://github.com/unitedbyai/droidclaw/releases/download/v0.3.1/app-debug.apk" class="btn-primary" style="display: inline-flex;">
+            <iconify-icon icon="ph:android-logo-duotone" width="16" height="16"></iconify-icon> download apk (v0.3.1)
+          </a>
+        </div>
+      </div>
+      <div class="stepper-step">
+        <span class="stepper-num">4</span>
         <h3>connect your phone</h3>
         <p>enable usb debugging in developer options, plug in via usb.</p>
 <pre>adb devices   # should show your device
 cd droidclaw && bun run src/kernel.ts</pre>
       </div>
       <div class="stepper-step">
-        <span class="stepper-num">4</span>
+        <span class="stepper-num">5</span>
         <h3>tune (optional)</h3>
         <table>
           <thead><tr><th>key</th><th>default</th><th>what</th></tr></thead>
