@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import { form, getRequestEvent, query } from '$app/server';
 import { auth } from '$lib/server/auth';
 import { signupSchema, loginSchema } from '$lib/schema/auth';
+import { APIError } from 'better-auth';
 
 export const signup = form(signupSchema, async (user) => {
 	await auth.api.signUpEmail({ body: user });
@@ -10,7 +11,17 @@ export const signup = form(signupSchema, async (user) => {
 
 export const login = form(loginSchema, async (user) => {
 	const { request, url } = getRequestEvent();
-	await auth.api.signInEmail({ body: user, headers: request.headers });
+	try {
+		await auth.api.signInEmail({ body: user, headers: request.headers });
+	} catch (err: unknown) {
+		if (
+			err instanceof APIError &&
+			err.body?.message?.toLowerCase().includes('email not verified')
+		) {
+			redirect(307, '/verify-email');
+		}
+		throw err;
+	}
 	const next = url.searchParams.get('redirect') || '/dashboard';
 	redirect(303, next);
 });
