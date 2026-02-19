@@ -1,5 +1,5 @@
 /**
- * Session logging for DroidClaw.
+ * Session logging for PocketAgent.
  * Writes incremental .partial.json after each step (crash-safe),
  * and a final .json summary at session end.
  */

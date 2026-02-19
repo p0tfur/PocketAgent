@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 import * as v from 'valibot';
 import { activateLicenseSchema, activateCheckoutSchema } from '$lib/schema/license';
 
-/** Forward a request to the DroidClaw server with internal auth */
+/** Forward a request to the PocketAgent server with internal auth */
 async function serverFetch(path: string, body: Record<string, unknown>) {
 	const { locals } = getRequestEvent();
 	if (!locals.user) throw new Error('Not authenticated');

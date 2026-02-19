@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.connection
+package com.thisux.pocketagent.connection
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -13,23 +13,23 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.thisux.droidclaw.DroidClawApp
-import com.thisux.droidclaw.MainActivity
-import com.thisux.droidclaw.R
-import com.thisux.droidclaw.capture.ScreenCaptureManager
-import com.thisux.droidclaw.model.ConnectionState
-import com.thisux.droidclaw.model.GoalMessage
-import com.thisux.droidclaw.model.GoalStatus
-import com.thisux.droidclaw.model.AgentStep
-import com.thisux.droidclaw.model.HeartbeatMessage
-import com.thisux.droidclaw.model.AppsMessage
-import com.thisux.droidclaw.model.InstalledAppInfo
-import com.thisux.droidclaw.util.DeviceInfoHelper
+import com.thisux.pocketagent.PocketAgentApp
+import com.thisux.pocketagent.MainActivity
+import com.thisux.pocketagent.R
+import com.thisux.pocketagent.capture.ScreenCaptureManager
+import com.thisux.pocketagent.model.ConnectionState
+import com.thisux.pocketagent.model.GoalMessage
+import com.thisux.pocketagent.model.GoalStatus
+import com.thisux.pocketagent.model.AgentStep
+import com.thisux.pocketagent.model.HeartbeatMessage
+import com.thisux.pocketagent.model.AppsMessage
+import com.thisux.pocketagent.model.InstalledAppInfo
+import com.thisux.pocketagent.util.DeviceInfoHelper
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import com.thisux.droidclaw.model.StopGoalMessage
-import com.thisux.droidclaw.overlay.AgentOverlay
+import com.thisux.pocketagent.model.StopGoalMessage
+import com.thisux.pocketagent.overlay.AgentOverlay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -39,7 +39,7 @@ class ConnectionService : LifecycleService() {
 
     companion object {
         private const val TAG = "ConnectionSvc"
-        private const val CHANNEL_ID = "droidclaw_connection"
+        private const val CHANNEL_ID = "pocketagent_connection"
         private const val NOTIFICATION_ID = 1
 
         val connectionState = MutableStateFlow(ConnectionState.Disconnected)
@@ -49,9 +49,9 @@ class ConnectionService : LifecycleService() {
         val errorMessage = MutableStateFlow<String?>(null)
         var instance: ConnectionService? = null
 
-        const val ACTION_CONNECT = "com.thisux.droidclaw.CONNECT"
-        const val ACTION_DISCONNECT = "com.thisux.droidclaw.DISCONNECT"
-        const val ACTION_SEND_GOAL = "com.thisux.droidclaw.SEND_GOAL"
+        const val ACTION_CONNECT = "com.thisux.pocketagent.CONNECT"
+        const val ACTION_DISCONNECT = "com.thisux.pocketagent.DISCONNECT"
+        const val ACTION_SEND_GOAL = "com.thisux.pocketagent.SEND_GOAL"
         const val EXTRA_GOAL = "goal_text"
     }
 
@@ -91,7 +91,7 @@ class ConnectionService : LifecycleService() {
 
     private fun connect() {
         lifecycleScope.launch {
-            val app = application as DroidClawApp
+            val app = application as PocketAgentApp
             val apiKey = app.settingsStore.apiKey.first()
             val serverUrl = app.settingsStore.serverUrl.first()
 
@@ -303,10 +303,10 @@ class ConnectionService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "DroidClaw Connection",
+                "PocketAgent Connection",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Shows when DroidClaw is connected to the server"
+                description = "Shows when PocketAgent is connected to the server"
             }
             val nm = getSystemService(NotificationManager::class.java)
             nm.createNotificationChannel(channel)
@@ -329,7 +329,7 @@ class ConnectionService : LifecycleService() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("DroidClaw")
+            .setContentTitle("PocketAgent")
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
@@ -347,7 +347,7 @@ class ConnectionService : LifecycleService() {
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         wakeLock = pm.newWakeLock(
             PowerManager.PARTIAL_WAKE_LOCK,
-            "DroidClaw::ConnectionWakeLock"
+            "PocketAgent::ConnectionWakeLock"
         ).apply {
             acquire(10 * 60 * 1000L)
         }

@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.accessibility
+package com.thisux.pocketagent.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
@@ -11,13 +11,13 @@ import android.provider.CalendarContract
 import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
-import com.thisux.droidclaw.model.ServerMessage
+import com.thisux.pocketagent.model.ServerMessage
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 data class ActionResult(val success: Boolean, val error: String? = null, val data: String? = null)
 
-class GestureExecutor(private val service: DroidClawAccessibilityService) {
+class GestureExecutor(private val service: PocketAgentAccessibilityService) {
 
     companion object {
         private const val TAG = "GestureExecutor"
@@ -178,7 +178,7 @@ class GestureExecutor(private val service: DroidClawAccessibilityService) {
 
     private fun executeClipboardSet(text: String): ActionResult {
         val clipboard = service.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-        val clip = android.content.ClipData.newPlainText("droidclaw", text)
+        val clip = android.content.ClipData.newPlainText("pocketagent", text)
         clipboard.setPrimaryClip(clip)
         return ActionResult(true)
     }

@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.model
+package com.thisux.pocketagent.model
 
 import kotlinx.serialization.Serializable
 

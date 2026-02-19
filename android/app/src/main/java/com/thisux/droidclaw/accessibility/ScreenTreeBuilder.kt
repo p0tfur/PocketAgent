@@ -1,8 +1,8 @@
-package com.thisux.droidclaw.accessibility
+package com.thisux.pocketagent.accessibility
 
 import android.graphics.Rect
 import android.view.accessibility.AccessibilityNodeInfo
-import com.thisux.droidclaw.model.UIElement
+import com.thisux.pocketagent.model.UIElement
 import java.security.MessageDigest
 
 object ScreenTreeBuilder {
@@ -21,8 +21,8 @@ object ScreenTreeBuilder {
         parentDesc: String
     ) {
         try {
-            // Skip DroidClaw's own overlay nodes so the agent never sees them
-            if (node.packageName?.toString() == "com.thisux.droidclaw") return
+            // Skip PocketAgent's own overlay nodes so the agent never sees them
+            if (node.packageName?.toString() == "com.thisux.pocketagent") return
 
             val rect = Rect()
             node.getBoundsInScreen(rect)

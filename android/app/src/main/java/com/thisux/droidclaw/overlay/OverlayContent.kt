@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.overlay
+package com.thisux.pocketagent.overlay
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -39,10 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.thisux.droidclaw.connection.ConnectionService
-import com.thisux.droidclaw.model.ConnectionState
-import com.thisux.droidclaw.model.GoalStatus
-import com.thisux.droidclaw.ui.theme.DroidClawTheme
+import com.thisux.pocketagent.connection.ConnectionService
+import com.thisux.pocketagent.model.ConnectionState
+import com.thisux.pocketagent.model.GoalStatus
+import com.thisux.pocketagent.ui.theme.PocketAgentTheme
 import kotlinx.coroutines.delay
 
 private val Green = Color(0xFF4CAF50)
@@ -53,7 +53,7 @@ private val PillBackground = Color(0xE6212121)
 
 @Composable
 fun OverlayContent() {
-    DroidClawTheme {
+    PocketAgentTheme {
         val connectionState by ConnectionService.connectionState.collectAsState()
         val goalStatus by ConnectionService.currentGoalStatus.collectAsState()
         val steps by ConnectionService.currentSteps.collectAsState()

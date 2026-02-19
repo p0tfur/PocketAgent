@@ -1,5 +1,5 @@
 /**
- * Server-side agent loop for DroidClaw.
+ * Server-side agent loop for PocketAgent.
  *
  * Adapts the CLI agent loop (src/kernel.ts) to work over WebSocket.
  * The loop runs on the server: gets screen state from the phone via
@@ -31,7 +31,7 @@ import { createStuckDetector } from "./stuck.js";
 import { db } from "../db.js";
 import { agentSession, agentStep, device as deviceTable } from "../schema.js";
 import { eq } from "drizzle-orm";
-import type { UIElement, ActionDecision } from "@droidclaw/shared";
+import type { UIElement, ActionDecision } from "@pocketagent/shared";
 
 // ─── Public Types ───────────────────────────────────────────────
 

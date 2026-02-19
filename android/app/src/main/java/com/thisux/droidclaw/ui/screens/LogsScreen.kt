@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.screens
+package com.thisux.pocketagent.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.thisux.droidclaw.connection.ConnectionService
-import com.thisux.droidclaw.model.GoalStatus
-import com.thisux.droidclaw.ui.theme.StatusAmber
-import com.thisux.droidclaw.ui.theme.StatusGreen
-import com.thisux.droidclaw.ui.theme.StatusRed
+import com.thisux.pocketagent.connection.ConnectionService
+import com.thisux.pocketagent.model.GoalStatus
+import com.thisux.pocketagent.ui.theme.StatusAmber
+import com.thisux.pocketagent.ui.theme.StatusGreen
+import com.thisux.pocketagent.ui.theme.StatusRed
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

@@ -1,10 +1,10 @@
-package com.thisux.droidclaw.connection
+package com.thisux.pocketagent.connection
 
 import android.util.Log
-import com.thisux.droidclaw.model.AuthMessage
-import com.thisux.droidclaw.model.ConnectionState
-import com.thisux.droidclaw.model.DeviceInfoMsg
-import com.thisux.droidclaw.model.ServerMessage
+import com.thisux.pocketagent.model.AuthMessage
+import com.thisux.pocketagent.model.ConnectionState
+import com.thisux.pocketagent.model.DeviceInfoMsg
+import com.thisux.pocketagent.model.ServerMessage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.websocket.WebSockets

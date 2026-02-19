@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.components
+package com.thisux.pocketagent.ui.components
 
 import android.app.Activity
 import android.content.Context
@@ -31,22 +31,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.thisux.droidclaw.DroidClawApp
-import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
-import com.thisux.droidclaw.capture.ScreenCaptureManager
-import com.thisux.droidclaw.ui.theme.StatusGreen
-import com.thisux.droidclaw.ui.theme.StatusRed
-import com.thisux.droidclaw.util.BatteryOptimization
+import com.thisux.pocketagent.PocketAgentApp
+import com.thisux.pocketagent.accessibility.PocketAgentAccessibilityService
+import com.thisux.pocketagent.capture.ScreenCaptureManager
+import com.thisux.pocketagent.ui.theme.StatusGreen
+import com.thisux.pocketagent.ui.theme.StatusRed
+import com.thisux.pocketagent.util.BatteryOptimization
 
 @Composable
 fun PermissionStatusBar(onNavigateToSettings: () -> Unit) {
     val context = LocalContext.current
-    val app = context.applicationContext as DroidClawApp
+    val app = context.applicationContext as PocketAgentApp
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
     val isCaptureAvailable by ScreenCaptureManager.isAvailable.collectAsState()
 
     var isAccessibilityEnabled by remember {
-        mutableStateOf(DroidClawAccessibilityService.isEnabledOnDevice(context))
+        mutableStateOf(PocketAgentAccessibilityService.isEnabledOnDevice(context))
     }
     var hasCaptureConsent by remember {
         ScreenCaptureManager.restoreConsent(context)
@@ -63,7 +63,7 @@ fun PermissionStatusBar(onNavigateToSettings: () -> Unit) {
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                isAccessibilityEnabled = DroidClawAccessibilityService.isEnabledOnDevice(context)
+                isAccessibilityEnabled = PocketAgentAccessibilityService.isEnabledOnDevice(context)
                 ScreenCaptureManager.restoreConsent(context)
                 hasCaptureConsent = isCaptureAvailable || ScreenCaptureManager.hasConsent()
                 isBatteryExempt = BatteryOptimization.isIgnoringBatteryOptimizations(context)

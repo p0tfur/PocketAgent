@@ -11,7 +11,7 @@
 				<Icon icon="ph:robot-duotone" class="h-6 w-6 text-white" />
 			</div>
 			<h1 class="text-2xl font-bold">Create your account</h1>
-			<p class="mt-1 text-sm text-neutral-500">Get started with DroidClaw</p>
+			<p class="mt-1 text-sm text-neutral-500">Get started with PocketAgent</p>
 		</div>
 
 		<form {...signup} class="space-y-4">

@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.capture
+package com.thisux.pocketagent.capture
 
 import android.app.Activity
 import android.content.Context
@@ -99,7 +99,7 @@ class ScreenCaptureManager(private val context: Context) {
 
         imageReader = ImageReader.newInstance(captureWidth, captureHeight, PixelFormat.RGBA_8888, 2)
         virtualDisplay = mediaProjection?.createVirtualDisplay(
-            "DroidClaw",
+            "PocketAgent",
             captureWidth, captureHeight, screenDensity,
             DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
             imageReader!!.surface, null, null

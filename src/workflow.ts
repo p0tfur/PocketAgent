@@ -1,8 +1,8 @@
 /**
- * Workflow orchestration engine for DroidClaw.
+ * Workflow orchestration engine for PocketAgent.
  *
  * Executes a sequence of sub-goals, each optionally scoped to a specific app.
- * This is DroidClaw's equivalent of `analyze_and_act(sub_goal, app)`.
+ * This is PocketAgent's equivalent of `analyze_and_act(sub_goal, app)`.
  *
  * Usage:
  *   bun run src/kernel.ts --workflow examples/workflows/productivity/logistics-workflow.json

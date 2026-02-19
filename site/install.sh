@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
 
-# droidclaw installer
-# curl -fsSL https://droidclaw.ai/install.sh | sh
+# pocketagent installer
+# curl -fsSL https://ragframe.work/install.sh | sh
 
-REPO="https://github.com/unitedbyai/droidclaw.git"
-INSTALL_DIR="droidclaw"
+REPO="https://github.com/unitedbyai/pocketagent.git"
+INSTALL_DIR="pocketagent"
 MIN_BUN_MAJOR=1
 
 # colors
@@ -22,7 +22,7 @@ success() { printf "${GREEN}>${RESET} %s\n" "$1"; }
 warn() { printf "${YELLOW}>${RESET} %s\n" "$1"; }
 error() { printf "${RED}error:${RESET} %s\n" "$1"; exit 1; }
 
-printf "\n${BOLD}droidclaw${RESET} ${DIM}— ai agent for android${RESET}\n\n"
+printf "\n${BOLD}pocketagent${RESET} ${DIM}— ai agent for android${RESET}\n\n"
 
 # ─── check curl ───
 if ! command -v curl >/dev/null 2>&1; then
@@ -35,7 +35,7 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 # ─── check/install bun ───
-# droidclaw requires bun — it uses Bun.spawnSync() and native .env loading
+# pocketagent requires bun — it uses Bun.spawnSync() and native .env loading
 # these APIs don't exist in node/npm, so node won't work
 install_bun() {
   info "installing bun..."
@@ -56,7 +56,7 @@ if command -v bun >/dev/null 2>&1; then
   fi
 else
   if command -v node >/dev/null 2>&1; then
-    warn "node found but droidclaw requires bun (uses bun-specific APIs)"
+    warn "node found but pocketagent requires bun (uses bun-specific APIs)"
     warn "node/npm won't work — installing bun alongside node..."
   fi
   install_bun
@@ -129,13 +129,13 @@ fi
 # ─── clone or update ───
 if [ -d "$INSTALL_DIR" ]; then
   if [ -d "$INSTALL_DIR/.git" ]; then
-    info "droidclaw directory exists, pulling latest..."
+    info "pocketagent directory exists, pulling latest..."
     (cd "$INSTALL_DIR" && git pull --quiet)
   else
     error "directory '$INSTALL_DIR' exists but is not a git repo. remove it or install elsewhere."
   fi
 else
-  info "cloning droidclaw..."
+  info "cloning pocketagent..."
   git clone --quiet --depth 1 "$REPO" "$INSTALL_DIR"
 fi
 
@@ -167,7 +167,7 @@ if [ -n "$MISSING" ]; then
 fi
 
 printf "next steps:\n\n"
-printf "  ${BOLD}1.${RESET} configure an llm provider in ${CYAN}droidclaw/.env${RESET}\n\n"
+printf "  ${BOLD}1.${RESET} configure an llm provider in ${CYAN}pocketagent/.env${RESET}\n\n"
 printf "     ${DIM}# groq (free tier, fastest to start)${RESET}\n"
 printf "     ${DIM}# set in .env:${RESET} LLM_PROVIDER=groq\n"
 printf "     ${DIM}#             ${RESET} GROQ_API_KEY=gsk_...\n\n"
@@ -177,6 +177,6 @@ printf "     ${DIM}# set in .env:${RESET} LLM_PROVIDER=ollama\n\n"
 printf "  ${BOLD}2.${RESET} connect your android phone (usb debugging on)\n\n"
 printf "     adb devices\n\n"
 printf "  ${BOLD}3.${RESET} run it\n\n"
-printf "     cd droidclaw && bun run src/kernel.ts\n\n"
-printf "docs: ${CYAN}https://droidclaw.ai${RESET}\n"
-printf "repo: ${CYAN}https://github.com/unitedbyai/droidclaw${RESET}\n\n"
+printf "     cd pocketagent && bun run src/kernel.ts\n\n"
+printf "docs: ${CYAN}https://ragframe.work${RESET}\n"
+printf "repo: ${CYAN}https://github.com/unitedbyai/pocketagent${RESET}\n\n"

@@ -1,5 +1,5 @@
 import type { ServerWebSocket } from "bun";
-import type { DeviceInfo, DashboardMessage } from "@droidclaw/shared";
+import type { DeviceInfo, DashboardMessage } from "@pocketagent/shared";
 
 /** Data attached to each WebSocket connection by Bun.serve upgrade */
 export interface WebSocketData {

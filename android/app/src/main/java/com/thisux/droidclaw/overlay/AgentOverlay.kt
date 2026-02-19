@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.overlay
+package com.thisux.pocketagent.overlay
 
 import android.content.Intent
 import android.graphics.PixelFormat
@@ -14,7 +14,7 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import com.thisux.droidclaw.MainActivity
+import com.thisux.pocketagent.MainActivity
 
 class AgentOverlay(private val service: LifecycleService) {
 

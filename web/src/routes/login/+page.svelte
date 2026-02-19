@@ -10,7 +10,7 @@
 			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900">
 				<Icon icon="ph:robot-duotone" class="h-6 w-6 text-white" />
 			</div>
-			<h1 class="text-2xl font-bold">Log in to DroidClaw</h1>
+			<h1 class="text-2xl font-bold">Log in to PocketAgent</h1>
 			<p class="mt-1 text-sm text-neutral-500">Welcome back</p>
 		</div>
 

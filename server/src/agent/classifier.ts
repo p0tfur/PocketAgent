@@ -1,5 +1,5 @@
 /**
- * Stage 2: LLM-based goal classifier for DroidClaw pipeline.
+ * Stage 2: LLM-based goal classifier for PocketAgent pipeline.
  *
  * Makes a single small LLM call to classify goals that didn't match
  * any regex pattern in Stage 1. Returns either an intent to fire
@@ -10,7 +10,7 @@ import type {
   DeviceCapabilities,
   PipelineResult,
   IntentCommand,
-} from "@droidclaw/shared";
+} from "@pocketagent/shared";
 import {
   getLlmProvider,
   getClassifierPrompt,

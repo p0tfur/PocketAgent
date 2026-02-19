@@ -1,4 +1,4 @@
-package com.thisux.droidclaw
+package com.thisux.pocketagent
 
 import org.junit.Test
 

@@ -1,5 +1,5 @@
 /**
- * Server-side multi-step skills for the DroidClaw agent loop.
+ * Server-side multi-step skills for the PocketAgent agent loop.
  *
  * These replace 3-8 LLM calls with deterministic server-side logic.
  * Each skill uses sessions.sendCommand() to interact with the device
@@ -15,7 +15,7 @@
  */
 
 import { sessions } from "../ws/sessions.js";
-import type { UIElement } from "@droidclaw/shared";
+import type { UIElement } from "@pocketagent/shared";
 
 // ─── Types ──────────────────────────────────────────────────────
 

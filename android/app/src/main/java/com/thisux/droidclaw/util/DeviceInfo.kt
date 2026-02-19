@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.util
+package com.thisux.pocketagent.util
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import com.thisux.droidclaw.model.DeviceInfoMsg
+import com.thisux.pocketagent.model.DeviceInfoMsg
 
 object DeviceInfoHelper {
     fun get(context: Context): DeviceInfoMsg {

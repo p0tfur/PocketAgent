@@ -1,9 +1,9 @@
-package com.thisux.droidclaw
+package com.thisux.pocketagent
 
 import android.app.Application
-import com.thisux.droidclaw.data.SettingsStore
+import com.thisux.pocketagent.data.SettingsStore
 
-class DroidClawApp : Application() {
+class PocketAgentApp : Application() {
     lateinit var settingsStore: SettingsStore
         private set
 

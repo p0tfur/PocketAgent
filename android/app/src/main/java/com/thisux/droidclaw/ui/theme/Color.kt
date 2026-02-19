@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.theme
+package com.thisux.pocketagent.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

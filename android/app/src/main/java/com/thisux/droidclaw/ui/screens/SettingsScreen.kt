@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.screens
+package com.thisux.pocketagent.ui.screens
 
 import android.app.Activity
 import android.content.Context
@@ -53,28 +53,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.thisux.droidclaw.DroidClawApp
-import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
-import com.thisux.droidclaw.capture.ScreenCaptureManager
-import com.thisux.droidclaw.connection.ConnectionService
-import com.thisux.droidclaw.model.ConnectionState
-import com.thisux.droidclaw.ui.theme.StatusAmber
-import com.thisux.droidclaw.ui.theme.StatusGreen
-import com.thisux.droidclaw.ui.theme.StatusRed
-import com.thisux.droidclaw.util.BatteryOptimization
+import com.thisux.pocketagent.PocketAgentApp
+import com.thisux.pocketagent.accessibility.PocketAgentAccessibilityService
+import com.thisux.pocketagent.capture.ScreenCaptureManager
+import com.thisux.pocketagent.connection.ConnectionService
+import com.thisux.pocketagent.model.ConnectionState
+import com.thisux.pocketagent.ui.theme.StatusAmber
+import com.thisux.pocketagent.ui.theme.StatusGreen
+import com.thisux.pocketagent.ui.theme.StatusRed
+import com.thisux.pocketagent.util.BatteryOptimization
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen() {
     val context = LocalContext.current
-    val app = context.applicationContext as DroidClawApp
+    val app = context.applicationContext as PocketAgentApp
     val scope = rememberCoroutineScope()
 
     val connectionState by ConnectionService.connectionState.collectAsState()
     val errorMessage by ConnectionService.errorMessage.collectAsState()
 
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
-    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.droidclaw.ai")
+    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.ragframe.work")
 
     var editingApiKey by remember { mutableStateOf<String?>(null) }
     val displayApiKey = editingApiKey ?: apiKey
@@ -84,7 +84,7 @@ fun SettingsScreen() {
     val isCaptureAvailable by ScreenCaptureManager.isAvailable.collectAsState()
 
     var isAccessibilityEnabled by remember {
-        mutableStateOf(DroidClawAccessibilityService.isEnabledOnDevice(context))
+        mutableStateOf(PocketAgentAccessibilityService.isEnabledOnDevice(context))
     }
     var hasCaptureConsent by remember {
         ScreenCaptureManager.restoreConsent(context)
@@ -101,7 +101,7 @@ fun SettingsScreen() {
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                isAccessibilityEnabled = DroidClawAccessibilityService.isEnabledOnDevice(context)
+                isAccessibilityEnabled = PocketAgentAccessibilityService.isEnabledOnDevice(context)
                 ScreenCaptureManager.restoreConsent(context)
                 hasCaptureConsent = isCaptureAvailable || ScreenCaptureManager.hasConsent()
                 isBatteryExempt = BatteryOptimization.isIgnoringBatteryOptimizations(context)

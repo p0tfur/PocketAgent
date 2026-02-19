@@ -1,4 +1,4 @@
-# DroidClaw — Capabilities & Limitations
+# PocketAgent — Capabilities & Limitations
 
 ## Built-in Actions (15)
 

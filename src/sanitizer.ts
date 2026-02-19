@@ -1,5 +1,5 @@
 /**
- * XML Sanitizer for DroidClaw.
+ * XML Sanitizer for PocketAgent.
  * Parses Android Accessibility XML and extracts interactive UI elements
  * with full state information and parent-child hierarchy context.
  */

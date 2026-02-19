@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.screens
+package com.thisux.pocketagent.ui.screens
 
 import android.app.Activity
 import android.content.Context
@@ -51,27 +51,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.thisux.droidclaw.DroidClawApp
-import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
-import com.thisux.droidclaw.capture.ScreenCaptureManager
-import com.thisux.droidclaw.connection.ConnectionService
-import com.thisux.droidclaw.ui.theme.StatusGreen
-import com.thisux.droidclaw.util.BatteryOptimization
+import com.thisux.pocketagent.PocketAgentApp
+import com.thisux.pocketagent.accessibility.PocketAgentAccessibilityService
+import com.thisux.pocketagent.capture.ScreenCaptureManager
+import com.thisux.pocketagent.connection.ConnectionService
+import com.thisux.pocketagent.ui.theme.StatusGreen
+import com.thisux.pocketagent.util.BatteryOptimization
 import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingScreen(onComplete: () -> Unit) {
     val context = LocalContext.current
-    val app = context.applicationContext as DroidClawApp
+    val app = context.applicationContext as PocketAgentApp
     val scope = rememberCoroutineScope()
 
     var currentStep by remember { mutableIntStateOf(0) }
 
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
-    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.droidclaw.ai")
+    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.ragframe.work")
 
     var editingApiKey by remember { mutableStateOf("") }
-    var editingServerUrl by remember { mutableStateOf("wss://tunnel.droidclaw.ai") }
+    var editingServerUrl by remember { mutableStateOf("wss://tunnel.ragframe.work") }
 
     // Sync from datastore when loaded
     var initialized by remember { mutableStateOf(false) }
@@ -79,7 +79,7 @@ fun OnboardingScreen(onComplete: () -> Unit) {
         editingApiKey = apiKey
         initialized = true
     }
-    if (serverUrl != "wss://tunnel.droidclaw.ai" || editingServerUrl == "wss://tunnel.droidclaw.ai") {
+    if (serverUrl != "wss://tunnel.ragframe.work" || editingServerUrl == "wss://tunnel.ragframe.work") {
         editingServerUrl = serverUrl
     }
 
@@ -138,7 +138,7 @@ private fun OnboardingStepOne(
             color = MaterialTheme.colorScheme.onBackground
         )
         Text(
-            text = "DroidClaw",
+            text = "PocketAgent",
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.primary
         )
@@ -196,7 +196,7 @@ private fun OnboardingStepTwo(onGetStarted: () -> Unit) {
     val isCaptureAvailable by ScreenCaptureManager.isAvailable.collectAsState()
 
     var isAccessibilityEnabled by remember {
-        mutableStateOf(DroidClawAccessibilityService.isEnabledOnDevice(context))
+        mutableStateOf(PocketAgentAccessibilityService.isEnabledOnDevice(context))
     }
     var hasCaptureConsent by remember {
         ScreenCaptureManager.restoreConsent(context)
@@ -213,7 +213,7 @@ private fun OnboardingStepTwo(onGetStarted: () -> Unit) {
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                isAccessibilityEnabled = DroidClawAccessibilityService.isEnabledOnDevice(context)
+                isAccessibilityEnabled = PocketAgentAccessibilityService.isEnabledOnDevice(context)
                 ScreenCaptureManager.restoreConsent(context)
                 hasCaptureConsent = isCaptureAvailable || ScreenCaptureManager.hasConsent()
                 isBatteryExempt = BatteryOptimization.isIgnoringBatteryOptimizations(context)
@@ -253,7 +253,7 @@ private fun OnboardingStepTwo(onGetStarted: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "DroidClaw needs these permissions to control your device",
+            text = "PocketAgent needs these permissions to control your device",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center

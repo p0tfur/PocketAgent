@@ -1,4 +1,4 @@
-# DroidClaw — Use Cases
+# PocketAgent — Use Cases
 
 Real-world scenarios the agent can handle, organized by category. Each use case includes the goal you'd give the agent and the actions it would take.
 

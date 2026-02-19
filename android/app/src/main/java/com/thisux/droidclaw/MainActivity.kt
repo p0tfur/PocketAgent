@@ -1,4 +1,4 @@
-package com.thisux.droidclaw
+package com.thisux.pocketagent
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,13 +31,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.thisux.droidclaw.ui.components.PermissionStatusBar
-import com.thisux.droidclaw.ui.screens.HomeScreen
-import com.thisux.droidclaw.ui.screens.LogsScreen
-import com.thisux.droidclaw.ui.screens.OnboardingScreen
-import com.thisux.droidclaw.ui.screens.SettingsScreen
-import com.thisux.droidclaw.ui.theme.DroidClawTheme
-import com.thisux.droidclaw.ui.theme.InstrumentSerif
+import com.thisux.pocketagent.ui.components.PermissionStatusBar
+import com.thisux.pocketagent.ui.screens.HomeScreen
+import com.thisux.pocketagent.ui.screens.LogsScreen
+import com.thisux.pocketagent.ui.screens.OnboardingScreen
+import com.thisux.pocketagent.ui.screens.SettingsScreen
+import com.thisux.pocketagent.ui.theme.PocketAgentTheme
+import com.thisux.pocketagent.ui.theme.InstrumentSerif
 
 sealed class Screen(val route: String, val label: String) {
     data object Home : Screen("home", "Home")
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DroidClawTheme {
+            PocketAgentTheme {
                 MainNavigation()
             }
         }
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavigation() {
     val context = LocalContext.current
-    val app = context.applicationContext as DroidClawApp
+    val app = context.applicationContext as PocketAgentApp
     val hasOnboarded by app.settingsStore.hasOnboarded.collectAsState(initial = true)
 
     val navController = rememberNavController()
@@ -79,7 +79,7 @@ fun MainNavigation() {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "DroidClaw",
+                            text = "PocketAgent",
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontFamily = InstrumentSerif
                             )

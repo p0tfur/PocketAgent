@@ -8,7 +8,7 @@ This doc captures what was good, what was wrong, and how to ship it properly.
 
 ## The Core Idea
 
-Turn DroidClaw from a manual remote-control into a persistent automation engine. Users describe rules in plain English like:
+Turn PocketAgent from a manual remote-control into a persistent automation engine. Users describe rules in plain English like:
 
 - "When I get a WhatsApp message saying 'where are you', reply with 'Bangalore'"
 - "Whenever someone messages me on Telegram, auto-reply with 'I'm busy'"

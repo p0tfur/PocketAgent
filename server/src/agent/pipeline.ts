@@ -1,5 +1,5 @@
 /**
- * Intent-First Pipeline Orchestrator for DroidClaw.
+ * Intent-First Pipeline Orchestrator for PocketAgent.
  *
  * Goal → Parser (0 LLM) → Classifier (1 LLM) → UI Agent (3-8 LLM)
  *         handles ~30%      handles ~20%          handles ~50%
@@ -9,7 +9,7 @@ import type {
   InstalledApp,
   PipelineResult,
   ActionDecision,
-} from "@droidclaw/shared";
+} from "@pocketagent/shared";
 import { sessions } from "../ws/sessions.js";
 import { db } from "../db.js";
 import {

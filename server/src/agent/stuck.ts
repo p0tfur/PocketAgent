@@ -1,5 +1,5 @@
 /**
- * Stuck-loop detection for the DroidClaw agent loop.
+ * Stuck-loop detection for the PocketAgent agent loop.
  *
  * Same algorithm as the CLI kernel.ts: sliding window of recent actions
  * and screen hashes to detect repetition, with context-aware recovery hints.

@@ -7,10 +7,16 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "types": ["bun"],
+    "types": [
+      "bun"
+    ],
     "paths": {
-      "@droidclaw/shared": ["../packages/shared/src"]
+      "@pocketagent/shared": [
+        "../packages/shared/src"
+      ]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

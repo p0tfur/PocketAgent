@@ -1,5 +1,5 @@
 {
-  "name": "@droidclaw/server",
+  "name": "@pocketagent/server",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@droidclaw/shared": "workspace:*",
+    "@pocketagent/shared": "workspace:*",
     "@polar-sh/sdk": "^0.43.1",
     "better-auth": "^1.3.27",
     "drizzle-orm": "^0.44.5",

@@ -1,5 +1,5 @@
 /**
- * LLM Provider module for DroidClaw.
+ * LLM Provider module for PocketAgent.
  * Supports OpenAI, Groq, AWS Bedrock, OpenRouter (via Vercel AI SDK), and Ollama (local).
  *
  * Phase 3: Real multimodal vision (image content parts)

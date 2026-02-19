@@ -1,5 +1,5 @@
 /**
- * Flow runner for DroidClaw.
+ * Flow runner for PocketAgent.
  * Executes deterministic YAML flows (Maestro-style) — no LLM needed.
  *
  * Usage:

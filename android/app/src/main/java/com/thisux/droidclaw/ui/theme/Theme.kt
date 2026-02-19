@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.theme
+package com.thisux.pocketagent.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -59,7 +59,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun DroidClawTheme(
+fun PocketAgentTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

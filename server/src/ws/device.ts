@@ -1,5 +1,5 @@
 import type { ServerWebSocket } from "bun";
-import type { DeviceMessage } from "@droidclaw/shared";
+import type { DeviceMessage } from "@pocketagent/shared";
 import { eq, and } from "drizzle-orm";
 import { db } from "../db.js";
 import { apikey, llmConfig, device } from "../schema.js";

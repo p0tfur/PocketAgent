@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.thisux.droidclaw"
+    namespace = "com.thisux.pocketagent"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.thisux.droidclaw"
+        applicationId = "com.thisux.pocketagent"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

@@ -1,5 +1,5 @@
 /**
- * Configuration management for DroidClaw.
+ * Configuration management for PocketAgent.
  * Bun natively loads .env files — no dotenv needed.
  */
 

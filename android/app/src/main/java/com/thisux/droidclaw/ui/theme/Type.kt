@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.ui.theme
+package com.thisux.pocketagent.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.thisux.droidclaw.R
+import com.thisux.pocketagent.R
 
 val InstrumentSerif = FontFamily(
     Font(R.font.instrument_serif_regular, FontWeight.Normal)

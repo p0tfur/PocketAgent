@@ -1,5 +1,5 @@
 /**
- * Stage 1: Deterministic goal parser for DroidClaw pipeline.
+ * Stage 1: Deterministic goal parser for PocketAgent pipeline.
  *
  * Converts natural-language goals into Android intents or app launches
  * using regex patterns. Zero LLM calls.
@@ -13,7 +13,7 @@ import type {
   InstalledApp,
   PipelineResult,
   DeviceCapabilities,
-} from "@droidclaw/shared";
+} from "@pocketagent/shared";
 
 // ─── Capability Extraction ───────────────────────────────────
 

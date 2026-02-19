@@ -1,5 +1,5 @@
 /**
- * App-specific hints for the DroidClaw UI agent.
+ * App-specific hints for the PocketAgent UI agent.
  *
  * Injected into the agent prompt ONLY when the foreground app matches.
  * Keeps the prompt lean — no hints for apps that aren't on screen.

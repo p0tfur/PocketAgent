@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.util
+package com.thisux.pocketagent.util
 
 import android.content.Context
 import android.content.Intent

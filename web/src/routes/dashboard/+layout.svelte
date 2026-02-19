@@ -32,7 +32,7 @@
 <div class="flex min-h-screen">
 	<aside class="flex w-64 flex-col border-r border-neutral-200 bg-neutral-50 p-6">
 		<div class="mb-8">
-			<h1 class="text-lg font-bold tracking-tight">DroidClaw</h1>
+			<h1 class="text-lg font-bold tracking-tight">PocketAgent</h1>
 		</div>
 		<nav class="flex flex-col gap-1">
 			{#each navItems as item}

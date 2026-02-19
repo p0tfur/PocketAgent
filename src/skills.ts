@@ -1,5 +1,5 @@
 /**
- * Skills module for DroidClaw.
+ * Skills module for PocketAgent.
  * Multi-step smart actions that reduce LLM decision points and eliminate
  * entire categories of errors (coordinate guessing, wrong submit buttons, etc.)
  *

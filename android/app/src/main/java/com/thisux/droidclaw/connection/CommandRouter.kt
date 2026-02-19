@@ -1,17 +1,17 @@
-package com.thisux.droidclaw.connection
+package com.thisux.pocketagent.connection
 
 import android.util.Base64
 import android.util.Log
-import com.thisux.droidclaw.accessibility.DroidClawAccessibilityService
-import com.thisux.droidclaw.accessibility.GestureExecutor
-import com.thisux.droidclaw.accessibility.ScreenTreeBuilder
-import com.thisux.droidclaw.capture.ScreenCaptureManager
-import com.thisux.droidclaw.model.AgentStep
-import com.thisux.droidclaw.model.GoalStatus
-import com.thisux.droidclaw.model.PongMessage
-import com.thisux.droidclaw.model.ResultResponse
-import com.thisux.droidclaw.model.ScreenResponse
-import com.thisux.droidclaw.model.ServerMessage
+import com.thisux.pocketagent.accessibility.PocketAgentAccessibilityService
+import com.thisux.pocketagent.accessibility.GestureExecutor
+import com.thisux.pocketagent.accessibility.ScreenTreeBuilder
+import com.thisux.pocketagent.capture.ScreenCaptureManager
+import com.thisux.pocketagent.model.AgentStep
+import com.thisux.pocketagent.model.GoalStatus
+import com.thisux.pocketagent.model.PongMessage
+import com.thisux.pocketagent.model.ResultResponse
+import com.thisux.pocketagent.model.ScreenResponse
+import com.thisux.pocketagent.model.ServerMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class CommandRouter(
@@ -30,7 +30,7 @@ class CommandRouter(
     private var gestureExecutor: GestureExecutor? = null
 
     fun updateGestureExecutor() {
-        val svc = DroidClawAccessibilityService.instance
+        val svc = PocketAgentAccessibilityService.instance
         gestureExecutor = if (svc != null) GestureExecutor(svc) else null
     }
 
@@ -77,7 +77,7 @@ class CommandRouter(
 
     private fun handleGetScreen(requestId: String) {
         updateGestureExecutor()
-        val svc = DroidClawAccessibilityService.instance
+        val svc = PocketAgentAccessibilityService.instance
         val elements = svc?.getScreenTree() ?: emptyList()
         val packageName = try {
             svc?.rootInActiveWindow?.packageName?.toString()

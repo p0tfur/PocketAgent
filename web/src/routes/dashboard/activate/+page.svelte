@@ -105,7 +105,7 @@
 			<div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900">
 				<Icon icon="ph:robot-duotone" class="h-6 w-6 text-white" />
 			</div>
-			<h2 class="text-2xl font-bold">Get started with DroidClaw</h2>
+			<h2 class="text-2xl font-bold">Get started with PocketAgent</h2>
 			<p class="mt-2 text-neutral-500">
 				Unlock AI-powered Android device control.
 			</p>

@@ -1,8 +1,8 @@
-# droidclaw
+# pocketagent
 
 > an ai agent that controls your android phone. give it a goal in plain english — it figures out what to tap, type, and swipe.
 
-**[Download Android APK (v0.3.1)](https://github.com/unitedbyai/droidclaw/releases/download/v0.3.1/app-debug.apk)** | **[Dashboard](https://app.droidclaw.ai)** | **[Discord](https://discord.gg/nRHKQ29j)**
+**[Download Android APK (v0.3.1)](https://github.com/unitedbyai/pocketagent/releases/download/v0.3.1/app-debug.apk)** | **[Dashboard](https://app.ragframe.work)** | **[Discord](https://discord.gg/nRHKQ29j)**
 
 i wanted to turn my old android devices into ai agents. after a few hours reverse engineering accessibility trees and playing with tailscale.. it worked.
 
@@ -89,7 +89,7 @@ the core idea is dead simple — a **perception → reasoning → action** loop 
 
 ### what makes it not fall apart
 
-llms controlling ui's sounds fragile. and it is, if you don't handle the failure modes. here's what droidclaw does:
+llms controlling ui's sounds fragile. and it is, if you don't handle the failure modes. here's what pocketagent does:
 
 - **stuck loop detection** — if the screen doesn't change for 3 steps, recovery hints get injected into the prompt. context-aware hints based on what type of action is failing (tap vs swipe vs wait).
 - **repetition tracking** — a sliding window of recent actions catches retry loops even across screen changes. if the agent taps the same coordinates 3+ times, it gets told to stop and try something else.
@@ -105,7 +105,7 @@ llms controlling ui's sounds fragile. and it is, if you don't handle the failure
 ### quick install
 
 ```bash
-curl -fsSL https://droidclaw.ai/install.sh | sh
+curl -fsSL https://ragframe.work/install.sh | sh
 ```
 
 this installs bun and adb if missing, clones the repo, and sets up `.env`.
@@ -114,7 +114,7 @@ this installs bun and adb if missing, clones the repo, and sets up `.env`.
 
 **prerequisites:**
 
-- [bun](https://bun.sh) (required — node/npm won't work. droidclaw uses bun-specific apis like `Bun.spawnSync` and native `.env` loading)
+- [bun](https://bun.sh) (required — node/npm won't work. pocketagent uses bun-specific apis like `Bun.spawnSync` and native `.env` loading)
 - [adb](https://developer.android.com/tools/adb) (android debug bridge — comes with android sdk platform tools)
 - an android phone with usb debugging enabled
 - an llm provider api key (or ollama for fully local)
@@ -132,8 +132,8 @@ sudo apt install android-tools-adb
 curl -fsSL https://bun.sh/install | bash
 
 # clone and setup
-git clone https://github.com/unitedbyai/droidclaw.git
-cd droidclaw
+git clone https://github.com/unitedbyai/pocketagent.git
+cd pocketagent
 bun install
 cp .env.example .env
 ```
@@ -177,7 +177,7 @@ bun run src/kernel.ts
 
 ## three ways to use it
 
-droidclaw has three modes, each for a different use case:
+pocketagent has three modes, each for a different use case:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -268,7 +268,7 @@ name: Send WhatsApp Message
 - tap: "Contact Name"
 - wait: 1
 - tap: "Message"
-- type: "hello from droidclaw"
+- type: "hello from pocketagent"
 - tap: "Send"
 - done: "Message sent"
 ```
@@ -488,7 +488,7 @@ bun run typecheck                              # type-check (tsc --noEmit)
 
 **empty accessibility tree** — some apps (flutter, webviews, games) don't expose accessibility info. set `VISION_MODE=always` in `.env` to send screenshots every step instead.
 
-**swipe coordinates seem off** — droidclaw auto-detects screen resolution at startup. if your device has an unusual resolution, check the console output on step 1 for the detected resolution.
+**swipe coordinates seem off** — pocketagent auto-detects screen resolution at startup. if your device has an unusual resolution, check the console output on step 1 for the detected resolution.
 
 ---
 

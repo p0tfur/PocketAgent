@@ -1,5 +1,5 @@
 {
-  "name": "droidclaw",
+  "name": "pocketagent",
   "private": true,
   "packageManager": "bun@1.3.5",
   "workspaces": ["packages/*", "server", "web"],
@@ -7,6 +7,7 @@
   "description": "AI agent that takes control of your Android phone — give it a goal, it figures out the taps",
   "type": "module",
   "scripts": {
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:web\" --kill-others --names \"SERVER,WEB\"",
     "start": "bun run --cwd web start",
     "build": "bun run --cwd web build",
     "start:agent": "bun run src/kernel.ts",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/bun": "^1.1.0",
     "@types/js-yaml": "^4.0.9",
+    "concurrently": "^9.2.1",
     "typescript": "^5.6.0"
   }
 }

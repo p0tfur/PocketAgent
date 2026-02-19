@@ -1,5 +1,5 @@
 /**
- * Action execution module for DroidClaw.
+ * Action execution module for PocketAgent.
  * Handles all ADB commands for interacting with Android devices.
  *
  * Supported actions (28):

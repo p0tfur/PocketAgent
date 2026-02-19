@@ -20,8 +20,8 @@ export const auth = betterAuth({
 			try {
 				const result = await sendEmail({
 					to: user.email,
-					subject: 'Verify your DroidClaw email',
-					text: `Hi ${user.name || 'there'},\n\nClick the link below to verify your email:\n\n${url}\n\nThis link expires in 1 hour.\n\n-- DroidClaw`
+					subject: 'Verify your PocketAgent email',
+					text: `Hi ${user.name || 'there'},\n\nClick the link below to verify your email:\n\n${url}\n\nThis link expires in 1 hour.\n\n-- PocketAgent`
 				});
 			console.log('[Email] sendEmail result:', JSON.stringify(result));
 			} catch (err) {

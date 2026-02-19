@@ -1,5 +1,5 @@
 /**
- * LLM provider abstraction for the DroidClaw server agent loop.
+ * LLM provider abstraction for the PocketAgent server agent loop.
  *
  * For v1, implements an OpenAI-compatible provider that works with
  * OpenAI, Groq, and OpenRouter (all use the same /chat/completions API).

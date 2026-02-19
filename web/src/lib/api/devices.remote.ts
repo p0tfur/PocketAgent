@@ -163,7 +163,7 @@ export const listSessionSteps = query(
 const SERVER_URL = () => env.SERVER_URL || 'http://localhost:8080';
 const INTERNAL_SECRET = () => env.INTERNAL_SECRET || '';
 
-/** Forward a request to the DroidClaw server with internal auth */
+/** Forward a request to the PocketAgent server with internal auth */
 async function serverFetch(path: string, body: Record<string, unknown>) {
 	const { locals } = getRequestEvent();
 	if (!locals.user) throw new Error('unauthorized');

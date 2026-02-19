@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.data
+package com.thisux.pocketagent.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -27,7 +27,7 @@ class SettingsStore(private val context: Context) {
     }
 
     val serverUrl: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs[SettingsKeys.SERVER_URL] ?: "wss://tunnel.droidclaw.ai"
+        prefs[SettingsKeys.SERVER_URL] ?: "wss://tunnel.ragframe.work"
     }
 
     val deviceName: Flow<String> = context.dataStore.data.map { prefs ->

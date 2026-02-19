@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DroidClaw"
+rootProject.name = "PocketAgent"
 include(":app")

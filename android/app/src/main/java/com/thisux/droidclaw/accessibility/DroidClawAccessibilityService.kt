@@ -1,4 +1,4 @@
-package com.thisux.droidclaw.accessibility
+package com.thisux.pocketagent.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName
@@ -7,22 +7,22 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.AccessibilityNodeInfo
-import com.thisux.droidclaw.model.UIElement
+import com.thisux.pocketagent.model.UIElement
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 
-class DroidClawAccessibilityService : AccessibilityService() {
+class PocketAgentAccessibilityService : AccessibilityService() {
 
     companion object {
-        private const val TAG = "DroidClawA11y"
+        private const val TAG = "PocketAgentA11y"
         val isRunning = MutableStateFlow(false)
         val lastScreenTree = MutableStateFlow<List<UIElement>>(emptyList())
-        var instance: DroidClawAccessibilityService? = null
+        var instance: PocketAgentAccessibilityService? = null
 
         fun isEnabledOnDevice(context: Context): Boolean {
             val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-            val ourComponent = ComponentName(context, DroidClawAccessibilityService::class.java)
+            val ourComponent = ComponentName(context, PocketAgentAccessibilityService::class.java)
             return am.getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK)
                 .any { it.resolveInfo.serviceInfo.let { si ->
                     ComponentName(si.packageName, si.name) == ourComponent

@@ -1,5 +1,5 @@
 /**
- * Constants for DroidClaw.
+ * Constants for PocketAgent.
  * All magic strings, URLs, and fixed values in one place.
  */
 
