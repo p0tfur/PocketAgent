@@ -150,6 +150,26 @@ we recommend [neon](https://neon.tech) for the database. it's serverless postgre
 
 *note: for the web dashboard, append `?sslmode=require` if it's not there.*
 
+### android app installation
+
+to control your android device, you need to install the pocketagent companion app.
+
+**prerequisites:**
+- android device with developer options enabled.
+- usb debugging enabled.
+- android studio or command-line tools installed (for building).
+
+**building from source:**
+1.  navigate to the `android/` directory: `cd android`.
+2.  connect your android device via usb.
+3.  run the installation command:
+    ```bash
+    ./gradlew installDebug
+    ```
+4.  launch "pocketagent" on your device.
+5.  grant necessary permissions (accessibility, overlay, screen capture) when prompted.
+6.  enter your server url (e.g. `https://your-server.com` or local ip `http://192.168.1.x:3000`) and the api key from your dashboard.
+
 ### configure your llm
 
 edit `.env` and pick a provider. fastest way to start is groq (free tier):
