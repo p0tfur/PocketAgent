@@ -118,6 +118,7 @@ this installs bun and adb if missing, clones the repo, and sets up `.env`.
 - [adb](https://developer.android.com/tools/adb) (android debug bridge — comes with android sdk platform tools)
 - an android phone with usb debugging enabled
 - an llm provider api key (or ollama for fully local)
+- a postgres database (see below for free setup)
 
 ```bash
 # install adb
@@ -137,6 +138,17 @@ cd pocketagent
 bun install
 cp .env.example .env
 ```
+
+### database setup (free via neon)
+
+we recommend [neon](https://neon.tech) for the database. it's serverless postgres and has a generous free tier.
+
+1. go to [neon.tech](https://neon.tech) and sign up.
+2. create a new project.
+3. copy the connection string (`postgres://...`).
+4. paste it into your `server/.env` and `web/.env` as `DATABASE_URL`.
+
+*note: for the web dashboard, append `?sslmode=require` if it's not there.*
 
 ### configure your llm
 

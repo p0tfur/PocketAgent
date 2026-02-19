@@ -67,7 +67,7 @@ bun run --cwd server start     # Start production server
 - **WebSockets**:
     - `/ws/device`: Authenticated connection for Android devices.
     - `/ws/dashboard`: Real-time updates for the web dashboard.
-- **Authentication**: `better-auth` for user management.
+- **Authentication**: `better-auth` for user management (email verification disabled for streamlined onboarding).
 
 ### Key Patterns
 - **WebSocket Upgrade**: Handled in `index.ts` using `Bun.serve`'s `fetch` hook.

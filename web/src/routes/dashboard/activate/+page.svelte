@@ -26,7 +26,11 @@
 	}
 
 	onMount(() => {
-		if (checkoutId) activateCheckout();
+		if (checkoutId) {
+			activateCheckout();
+		} else {
+			goto('/dashboard');
+		}
 	});
 </script>
 
