@@ -6,22 +6,12 @@ import { APIError } from 'better-auth';
 
 export const signup = form(signupSchema, async (user) => {
 	await auth.api.signUpEmail({ body: user });
-	redirect(307, '/verify-email');
+	redirect(307, '/dashboard');
 });
 
 export const login = form(loginSchema, async (user) => {
 	const { request, url } = getRequestEvent();
-	try {
-		await auth.api.signInEmail({ body: user, headers: request.headers });
-	} catch (err: unknown) {
-		if (
-			err instanceof APIError &&
-			err.body?.message?.toLowerCase().includes('email not verified')
-		) {
-			redirect(307, '/verify-email');
-		}
-		throw err;
-	}
+	await auth.api.signInEmail({ body: user, headers: request.headers });
 	const next = url.searchParams.get('redirect') || '/dashboard';
 	const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
 	redirect(303, safeNext);
