@@ -1,4 +1,4 @@
-FROM oven/bun:1 as base
+FROM oven/bun:1
 WORKDIR /app
 
 # Copy root workspace files
@@ -19,14 +19,6 @@ COPY web ./web
 # Build
 WORKDIR /app/web
 RUN bun run build
-
-# Runner
-FROM oven/bun:1 as runner
-WORKDIR /app
-
-COPY --from=base /app/web/build ./build
-COPY --from=base /app/web/package.json ./package.json
-COPY --from=base /app/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["bun", "build/index.js"]
