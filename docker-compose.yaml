@@ -14,6 +14,13 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${ORIGIN}
       - INTERNAL_SECRET=${INTERNAL_SECRET}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.server.rule=Host(`tunnel.pa.rpaby.pw`)
+      - traefik.http.routers.server.entrypoints=websecure
+      - traefik.http.routers.server.tls=true
+      - traefik.http.routers.server.tls.certresolver=letsencrypt
+      - traefik.http.services.server.loadbalancer.server.port=8080
 
   web:
     build:
@@ -29,3 +36,10 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${ORIGIN}
       - INTERNAL_SECRET=${INTERNAL_SECRET}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web.rule=Host(`app.pa.rpaby.pw`)
+      - traefik.http.routers.web.entrypoints=websecure
+      - traefik.http.routers.web.tls=true
+      - traefik.http.routers.web.tls.certresolver=letsencrypt
+      - traefik.http.services.web.loadbalancer.server.port=3000
