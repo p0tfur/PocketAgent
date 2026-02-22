@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import { UseSend } from 'usesend-js';
 
-const EMAIL_FROM = 'PocketAgent <noreply@app.ragframe.work>';
+const EMAIL_FROM = 'PocketAgent <noreply@pa.rpaby.pw>';
 
 function getClient() {
 	if (!env.USESEND_API_KEY) throw new Error('USESEND_API_KEY is not set');

@@ -4,7 +4,7 @@ name: Ask Gemini and Share to WhatsApp
 - shell: "am start -n com.google.android.apps.bard/.shellapp.BardEntryPointActivity"
 - wait: 3
 - tap: "Ask Gemini"
-- type: "tell me more about ragframe.work"
+- type: "tell me more about pa.rpaby.pw"
 - tap: "Send"
 - wait: 20
 

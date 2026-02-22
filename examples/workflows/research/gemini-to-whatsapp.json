@@ -1,9 +1,9 @@
 {
-  "name": "Ask Gemini about DunSocial and share to WhatsApp",
+  "name": "Ask Gemini about pa.rpaby.pw and share to WhatsApp",
   "steps": [
     {
       "app": "com.google.android.apps.bard",
-      "goal": "Type 'tell me more about ragframe.work' in the text input field and tap send. Wait for the full AI response to load before marking done.",
+      "goal": "Type 'tell me more about pa.rpaby.pw' in the text input field and tap send. Wait for the full AI response to load before marking done.",
       "maxSteps": 10
     },
     {

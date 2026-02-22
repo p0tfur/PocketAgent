@@ -2,7 +2,7 @@
 set -e
 
 # pocketagent installer
-# curl -fsSL https://ragframe.work/install.sh | sh
+# curl -fsSL https://pa.rpaby.pw/install.sh | sh
 
 REPO="https://github.com/unitedbyai/pocketagent.git"
 INSTALL_DIR="pocketagent"
@@ -178,5 +178,5 @@ printf "  ${BOLD}2.${RESET} connect your android phone (usb debugging on)\n\n"
 printf "     adb devices\n\n"
 printf "  ${BOLD}3.${RESET} run it\n\n"
 printf "     cd pocketagent && bun run src/kernel.ts\n\n"
-printf "docs: ${CYAN}https://ragframe.work${RESET}\n"
+printf "docs: ${CYAN}https://pa.rpaby.pw${RESET}\n"
 printf "repo: ${CYAN}https://github.com/unitedbyai/pocketagent${RESET}\n\n"

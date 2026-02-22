@@ -27,7 +27,7 @@ class SettingsStore(private val context: Context) {
     }
 
     val serverUrl: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs[SettingsKeys.SERVER_URL] ?: "wss://tunnel.ragframe.work"
+        prefs[SettingsKeys.SERVER_URL] ?: "wss://tunnel.pa.rpaby.pw"
     }
 
     val deviceName: Flow<String> = context.dataStore.data.map { prefs ->
