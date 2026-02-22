@@ -28,8 +28,16 @@ PocketAgent korzysta z prostej pętli **Percepcja → Wnioskowanie → Akcja**:
 
 ### 1. Konfiguracja Bazy Danych
 PocketAgent korzysta z PostgreSQL. Polecamy darmową bazę danych [Neon](https://neon.tech).
-1. Utwórz projekt w panelu Neon i skopiuj jego "connection string".
-2. Dodaj go do pilków `.env` oraz `web/.env`: `DATABASE_URL=postgres://...`
+1. Utwórz projekt w panelu Neon.
+2. W zakładce **Connection Details** wybierz **"Pooled connection"** — i skopiuj ten link.
+3. Dodaj go do plików `.env` oraz `web/.env`: `DATABASE_URL=postgres://...`
+
+> **⚠️ Wdrożenie Docker / Coolify — używaj pooled endpoint!**
+> Bezpośrednie połączenie Neona (port `5432`) z wnętrza kontenerów dockerowych może zwracać błędy `ECONNREFUSED` lub `ETIMEDOUT`, ponieważ serwer bazy usypia się gdy nie jest używany (scale to zero). Przy wdrażaniu na serwer zawsze używaj **pooled connection string** (adres hosta zawiera `-pooler`, port `6543`):
+> ```
+> postgresql://user:pass@ep-xxx-pooler.us-east-2.aws.neon.tech:6543/neondb?sslmode=require
+> ```
+> Pooler jest cały czas aktywny i nie usypia.
 
 ### 2. Wybór Dostawcy LLM
 Edytuj plik `.env` i wybierz model. Aby szybko wystartować za darmo, sugerujemy Groq:

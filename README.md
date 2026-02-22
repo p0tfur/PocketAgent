@@ -28,8 +28,16 @@ It includes built-in safeguards like stuck loop detection, repetition tracking, 
 
 ### 1. Database Configuration
 PocketAgent uses PostgreSQL. We recommend a free [Neon](https://neon.tech) database.
-1. Create a Neon project and copy the connection string.
-2. Add it to your `.env` and `web/.env` files: `DATABASE_URL=postgres://...`
+1. Create a Neon project.
+2. In the Neon dashboard go to **Connection Details** and select **"Pooled connection"** — copy that string.
+3. Add it to your `.env` and `web/.env` files: `DATABASE_URL=postgres://...`
+
+> **⚠️ Docker / Coolify deployment — use the pooled endpoint!**
+> Neon's direct connection (port `5432`) can return `ECONNREFUSED` or `ETIMEDOUT` from Docker containers because the compute node scales to zero when idle. Always use the **pooled connection string** (hostname contains `-pooler`, port `6543`) for server deployments:
+> ```
+> postgresql://user:pass@ep-xxx-pooler.us-east-2.aws.neon.tech:6543/neondb?sslmode=require
+> ```
+> The pooler is always active and does not sleep.
 
 ### 2. LLM Provider
 Edit your `.env` to configure an LLM. For a free start, we recommend Groq:
