@@ -68,10 +68,10 @@ fun OnboardingScreen(onComplete: () -> Unit) {
     var currentStep by remember { mutableIntStateOf(0) }
 
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
-    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.pa.rpaby.pw")
+    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tpa.rpaby.pw")
 
     var editingApiKey by remember { mutableStateOf("") }
-    var editingServerUrl by remember { mutableStateOf("wss://tunnel.pa.rpaby.pw") }
+    var editingServerUrl by remember { mutableStateOf("wss://tpa.rpaby.pw") }
 
     // Sync from datastore when loaded
     var initialized by remember { mutableStateOf(false) }
@@ -79,7 +79,7 @@ fun OnboardingScreen(onComplete: () -> Unit) {
         editingApiKey = apiKey
         initialized = true
     }
-    if (serverUrl != "wss://tunnel.pa.rpaby.pw" || editingServerUrl == "wss://tunnel.pa.rpaby.pw") {
+    if (serverUrl != "wss://tpa.rpaby.pw" || editingServerUrl == "wss://tpa.rpaby.pw") {
         editingServerUrl = serverUrl
     }
 

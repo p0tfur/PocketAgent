@@ -74,7 +74,7 @@ fun SettingsScreen() {
     val errorMessage by ConnectionService.errorMessage.collectAsState()
 
     val apiKey by app.settingsStore.apiKey.collectAsState(initial = "")
-    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tunnel.pa.rpaby.pw")
+    val serverUrl by app.settingsStore.serverUrl.collectAsState(initial = "wss://tpa.rpaby.pw")
 
     var editingApiKey by remember { mutableStateOf<String?>(null) }
     val displayApiKey = editingApiKey ?: apiKey

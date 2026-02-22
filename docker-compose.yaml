@@ -14,8 +14,6 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${ORIGIN}
       - INTERNAL_SECRET=${INTERNAL_SECRET}
-    networks:
-      - coolify
 
   web:
     build:
@@ -31,9 +29,11 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${ORIGIN}
       - INTERNAL_SECRET=${INTERNAL_SECRET}
-    networks:
-      - coolify
 
-networks:
-  coolify:
-    external: true
+  site:
+    build:
+      context: ./site
+      dockerfile: Dockerfile
+    expose:
+      - "80"
+    restart: always
