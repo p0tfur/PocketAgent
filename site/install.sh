@@ -4,7 +4,7 @@ set -e
 # pocketagent installer
 # curl -fsSL https://pa.rpaby.pw/install.sh | sh
 
-REPO="https://github.com/unitedbyai/pocketagent.git"
+REPO="https://github.com/p0tfur/PocketAgent.git"
 INSTALL_DIR="pocketagent"
 MIN_BUN_MAJOR=1
 
@@ -179,4 +179,4 @@ printf "     adb devices\n\n"
 printf "  ${BOLD}3.${RESET} run it\n\n"
 printf "     cd pocketagent && bun run src/kernel.ts\n\n"
 printf "docs: ${CYAN}https://pa.rpaby.pw${RESET}\n"
-printf "repo: ${CYAN}https://github.com/unitedbyai/pocketagent${RESET}\n\n"
+printf "repo: ${CYAN}https://github.com/p0tfur/PocketAgent${RESET}\n\n"

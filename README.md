@@ -2,8 +2,6 @@
 
 > An AI agent that controls your Android phone. Give it a goal in plain English — it figures out what to tap, type, and swipe.
 
-**[Download Android APK (v0.3.1)](https://github.com/unitedbyai/pocketagent/releases/download/v0.3.1/app-debug.apk)** | **[Discord](https://discord.gg/nRHKQ29j)**
-
 *Read this in other languages: [Polski](README.pl.md)*
 
 PocketAgent breathes new life into your old Android devices by turning them into autonomous AI agents. By interpreting the Android accessibility tree, it operates your device intelligently—no APIs required.

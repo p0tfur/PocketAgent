@@ -105,7 +105,7 @@
 		</p>
 		<div class="mt-4 flex flex-col items-center gap-3">
 			<a
-				href="https://github.com/unitedbyai/pocketagent/releases/download/v0.3.1/app-debug.apk"
+				href="https://github.com/p0tfur/PocketAgent/releases/download/v0.3.1/app-debug.apk"
 				class="inline-flex items-center gap-1.5 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
 			>
 				<Icon icon="ph:android-logo-duotone" class="h-4 w-4" />

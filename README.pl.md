@@ -2,8 +2,6 @@
 
 > Agent AI, który kontroluje Twój telefon z Androidem. Podaj mu cel w prostym języku — a on sam wymyśli, co wcisnąć, co wpisać i jak przesunąć palcem po ekranie.
 
-**[Pobierz aplikację na Androida (v0.3.1)](https://github.com/unitedbyai/pocketagent/releases/download/v0.3.1/app-debug.apk)** | **[Discord](https://discord.gg/nRHKQ29j)**
-
 *Przeczytaj w innych językach: [English](README.md)*
 
 PocketAgent daje drugie życie starym urządzeniom z Androidem, zamieniając je w autonomicznych agentów AI. Dzięki analizie drzewa dostępności Androida (accessibility tree), inteligentnie obsługuje Twoje urządzenie — bez konieczności używania API.
