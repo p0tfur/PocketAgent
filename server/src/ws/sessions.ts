@@ -32,6 +32,7 @@ export interface PendingRequest {
   resolve: (data: unknown) => void;
   reject: (error: Error) => void;
   timer: ReturnType<typeof setTimeout>;
+  deviceId: string;
 }
 
 const DEFAULT_COMMAND_TIMEOUT = 30_000; // 30 seconds
@@ -49,8 +50,15 @@ class SessionManager {
 
   removeDevice(deviceId: string): void {
     this.devices.delete(deviceId);
-    // Note: pending requests for this device will time out naturally
-    // since we can't map requestId → deviceId without extra bookkeeping.
+    
+    // Clean up any pending requests awaiting this device
+    for (const [requestId, pending] of this.pendingRequests.entries()) {
+      if (pending.deviceId === deviceId) {
+        clearTimeout(pending.timer);
+        this.pendingRequests.delete(requestId);
+        pending.reject(new Error(`Device ${deviceId} disconnected before responding`));
+      }
+    }
   }
 
   getDevice(deviceId: string): ConnectedDevice | undefined {
@@ -140,7 +148,7 @@ class SessionManager {
         reject(new Error(`Command timed out after ${timeout}ms`));
       }, timeout);
 
-      this.pendingRequests.set(requestId, { resolve, reject, timer });
+      this.pendingRequests.set(requestId, { resolve, reject, timer, deviceId });
 
       try {
         device.ws.send(JSON.stringify(commandWithId));

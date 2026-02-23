@@ -120,7 +120,11 @@ class ReliableWebSocket(
             // Launch outbound sender
             val senderJob = launch {
                 for (msg in outbound) {
-                    send(Frame.Text(msg))
+                    try {
+                        send(Frame.Text(msg))
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to send outbound message: ${e.message}")
+                    }
                 }
             }
 
