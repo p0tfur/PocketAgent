@@ -26,7 +26,9 @@ import com.thisux.pocketagent.model.AppsMessage
 import com.thisux.pocketagent.model.InstalledAppInfo
 import com.thisux.pocketagent.util.DeviceInfoHelper
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import com.thisux.pocketagent.model.StopGoalMessage
 import com.thisux.pocketagent.overlay.AgentOverlay
@@ -73,7 +75,15 @@ class ConnectionService : LifecycleService() {
 
         when (intent?.action) {
             ACTION_CONNECT -> {
-                startForeground(NOTIFICATION_ID, buildNotification("Connecting..."))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    startForeground(
+                        NOTIFICATION_ID,
+                        buildNotification("Connecting..."),
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                    )
+                } else {
+                    startForeground(NOTIFICATION_ID, buildNotification("Connecting..."))
+                }
                 connect()
             }
             ACTION_DISCONNECT -> {

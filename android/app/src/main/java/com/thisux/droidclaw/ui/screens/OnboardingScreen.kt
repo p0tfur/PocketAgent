@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -106,7 +107,7 @@ fun OnboardingScreen(onComplete: () -> Unit) {
                         val intent = Intent(context, ConnectionService::class.java).apply {
                             action = ConnectionService.ACTION_CONNECT
                         }
-                        context.startForegroundService(intent)
+                        ContextCompat.startForegroundService(context, intent)
                         onComplete()
                     }
                 }
