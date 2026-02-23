@@ -100,84 +100,94 @@ class ConnectionService : LifecycleService() {
 
     private fun connect() {
         lifecycleScope.launch {
-            val app = application as PocketAgentApp
-            val apiKey = app.settingsStore.apiKey.first()
-            val serverUrl = app.settingsStore.serverUrl.first()
+            try {
+                val app = application as PocketAgentApp
+                val apiKey = app.settingsStore.apiKey.first()
+                val serverUrl = app.settingsStore.serverUrl.first()
 
-            if (apiKey.isBlank() || serverUrl.isBlank()) {
-                connectionState.value = ConnectionState.Error
-                errorMessage.value = "API key or server URL not configured"
-                stopSelf()
-                return@launch
-            }
+                if (apiKey.isBlank() || serverUrl.isBlank()) {
+                    connectionState.value = ConnectionState.Error
+                    errorMessage.value = "API key or server URL not configured"
+                    stopSelf()
+                    return@launch
+                }
 
-            ScreenCaptureManager.restoreConsent(this@ConnectionService)
-            captureManager = ScreenCaptureManager(this@ConnectionService).also { mgr ->
-                if (ScreenCaptureManager.hasConsent()) {
-                    try {
-                        mgr.initialize(
-                            ScreenCaptureManager.consentResultCode!!,
-                            ScreenCaptureManager.consentData!!
+                ScreenCaptureManager.restoreConsent(this@ConnectionService)
+                captureManager = ScreenCaptureManager(this@ConnectionService).also { mgr ->
+                    if (ScreenCaptureManager.hasConsent()) {
+                        try {
+                            mgr.initialize(
+                                ScreenCaptureManager.consentResultCode!!,
+                                ScreenCaptureManager.consentData!!
+                            )
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Screen capture unavailable: ${e.message}")
+                            ScreenCaptureManager.clearConsent(this@ConnectionService)
+                        }
+                    }
+                }
+
+                val ws = ReliableWebSocket(lifecycleScope) { msg ->
+                    commandRouter?.handleMessage(msg)
+                }
+                webSocket = ws
+
+                val router = CommandRouter(ws, captureManager)
+                commandRouter = router
+
+                launch {
+                    ws.state.collect { state ->
+                        connectionState.value = state
+                        updateNotification(
+                            when (state) {
+                                ConnectionState.Connected -> "Connected to server"
+                                ConnectionState.Connecting -> "Connecting..."
+                                ConnectionState.Error -> "Connection error"
+                                ConnectionState.Disconnected -> "Disconnected"
+                            }
                         )
-                    } catch (e: SecurityException) {
-                        Log.w(TAG, "Screen capture unavailable: ${e.message}")
-                        ScreenCaptureManager.clearConsent(this@ConnectionService)
-                    }
-                }
-            }
-
-            val ws = ReliableWebSocket(lifecycleScope) { msg ->
-                commandRouter?.handleMessage(msg)
-            }
-            webSocket = ws
-
-            val router = CommandRouter(ws, captureManager)
-            commandRouter = router
-
-            launch {
-                ws.state.collect { state ->
-                    connectionState.value = state
-                    updateNotification(
-                        when (state) {
-                            ConnectionState.Connected -> "Connected to server"
-                            ConnectionState.Connecting -> "Connecting..."
-                            ConnectionState.Error -> "Connection error"
-                            ConnectionState.Disconnected -> "Disconnected"
+                        // Send installed apps list once connected
+                        if (state == ConnectionState.Connected) {
+                            if (Settings.canDrawOverlays(this@ConnectionService)) {
+                                try {
+                                    overlay?.show()
+                                } catch (e: Exception) {
+                                    Log.w(TAG, "Overlay show failed: ${e.message}")
+                                }
+                            }
+                            val apps = getInstalledApps()
+                            webSocket?.sendTyped(AppsMessage(apps = apps))
+                            Log.i(TAG, "Sent ${apps.size} installed apps to server")
                         }
-                    )
-                    // Send installed apps list once connected
-                    if (state == ConnectionState.Connected) {
-                        if (Settings.canDrawOverlays(this@ConnectionService)) {
-                            overlay?.show()
+                    }
+                }
+                launch { ws.errorMessage.collect { errorMessage.value = it } }
+                launch { router.currentSteps.collect { currentSteps.value = it } }
+                launch { router.currentGoalStatus.collect { currentGoalStatus.value = it } }
+                launch { router.currentGoal.collect { currentGoal.value = it } }
+
+                acquireWakeLock()
+
+                val deviceInfo = DeviceInfoHelper.get(this@ConnectionService)
+                ws.connect(serverUrl, apiKey, deviceInfo)
+
+                // Periodic heartbeat for battery updates
+                launch {
+                    while (true) {
+                        delay(60_000L) // every 60 seconds
+                        if (connectionState.value == ConnectionState.Connected) {
+                            val (battery, charging) = DeviceInfoHelper.getBattery(this@ConnectionService)
+                            webSocket?.sendTyped(HeartbeatMessage(
+                                batteryLevel = battery,
+                                isCharging = charging
+                            ))
                         }
-                        val apps = getInstalledApps()
-                        webSocket?.sendTyped(AppsMessage(apps = apps))
-                        Log.i(TAG, "Sent ${apps.size} installed apps to server")
                     }
                 }
-            }
-            launch { ws.errorMessage.collect { errorMessage.value = it } }
-            launch { router.currentSteps.collect { currentSteps.value = it } }
-            launch { router.currentGoalStatus.collect { currentGoalStatus.value = it } }
-            launch { router.currentGoal.collect { currentGoal.value = it } }
-
-            acquireWakeLock()
-
-            val deviceInfo = DeviceInfoHelper.get(this@ConnectionService)
-            ws.connect(serverUrl, apiKey, deviceInfo)
-
-            // Periodic heartbeat for battery updates
-            launch {
-                while (true) {
-                    delay(60_000L) // every 60 seconds
-                    if (connectionState.value == ConnectionState.Connected) {
-                        val (battery, charging) = DeviceInfoHelper.getBattery(this@ConnectionService)
-                        webSocket?.sendTyped(HeartbeatMessage(
-                            batteryLevel = battery,
-                            isCharging = charging
-                        ))
-                    }
-                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Connection failed with unexpected error", e)
+                connectionState.value = ConnectionState.Error
+                errorMessage.value = "Connection failed: ${e.message}"
             }
         }
     }

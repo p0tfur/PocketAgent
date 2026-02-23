@@ -28,10 +28,17 @@ class AgentOverlay(private val service: LifecycleService) {
         init { controller.performRestore(null) }
     }
 
+    @Suppress("DEPRECATION")
+    private val overlayType = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+    } else {
+        WindowManager.LayoutParams.TYPE_PHONE
+    }
+
     private val layoutParams = WindowManager.LayoutParams(
         WindowManager.LayoutParams.WRAP_CONTENT,
         WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        overlayType,
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
         PixelFormat.TRANSLUCENT
     ).apply {
