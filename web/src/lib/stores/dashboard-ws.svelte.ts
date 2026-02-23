@@ -1,6 +1,8 @@
 import { env } from '$env/dynamic/public';
+import { browser } from '$app/environment';
 
-const WS_URL = env.PUBLIC_SERVER_WS_URL || 'ws://localhost:8080';
+const WS_URL = env.PUBLIC_SERVER_WS_URL || 
+	(browser ? `ws${window.location.protocol === 'https:' ? 's' : ''}://${window.location.host}` : 'ws://localhost:8080');
 
 export interface DashboardDevice {
 	deviceId: string;

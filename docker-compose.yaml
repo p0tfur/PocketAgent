@@ -25,6 +25,8 @@ services:
     environment:
       - ORIGIN=${ORIGIN}
       - PUBLIC_API_URL=${PUBLIC_API_URL}
+      - SERVER_URL=http://server:8080
+      - PUBLIC_SERVER_WS_URL=${PUBLIC_SERVER_WS_URL}
       - DATABASE_URL=${DATABASE_URL}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${ORIGIN}
