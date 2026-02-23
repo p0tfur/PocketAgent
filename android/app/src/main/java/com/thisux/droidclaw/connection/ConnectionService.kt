@@ -28,7 +28,6 @@ import com.thisux.pocketagent.util.DeviceInfoHelper
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import com.thisux.pocketagent.model.StopGoalMessage
 import com.thisux.pocketagent.overlay.AgentOverlay
