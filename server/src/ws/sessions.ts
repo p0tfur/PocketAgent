@@ -142,6 +142,8 @@ class SessionManager {
 
     const commandWithId = { ...command, requestId };
 
+    console.log(`[WS] Sending command to ${device.persistentDeviceId ?? deviceId}: ${command.type} (id: ${requestId})`);
+
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pendingRequests.delete(requestId);

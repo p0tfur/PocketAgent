@@ -161,6 +161,7 @@ export async function runPipeline(
   const apps = persistentDeviceId
     ? await fetchInstalledApps(persistentDeviceId)
     : [];
+  console.log(`[Pipeline] Loaded ${apps.length} apps for device capabilities`);
   const caps = buildCapabilities(apps);
 
   // ── Stage 1: Deterministic Parser ────────────────────────
@@ -207,6 +208,7 @@ export async function runPipeline(
   }
 
   // ── Stage 2: LLM Classifier ──────────────────────────────
+  console.log(`[Pipeline] Calling classifier for goal: "${goal}"`);
   const classResult = await classifyGoal(goal, caps, llmConfig);
   console.log(`[Pipeline] Stage 2 (Classifier): ${classResult.type}`);
 

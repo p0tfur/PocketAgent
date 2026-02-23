@@ -23,6 +23,7 @@ goals.post("/", async (c) => {
     llmModel?: string;
     maxSteps?: number;
   }>();
+  console.log(`[Goals] POST / Received goal: "${body.goal}" for device: ${body.deviceId}`);
 
   if (!body.deviceId || !body.goal) {
     return c.json({ error: "deviceId and goal are required" }, 400);
@@ -83,6 +84,7 @@ goals.post("/", async (c) => {
       return c.json({ error: "No LLM provider configured. Set it up in the web dashboard Settings." }, 400);
     }
   }
+  console.log(`[Goals] Using LLM provider: ${llmCfg.provider}, model: ${llmCfg.model || "default"}`);
 
   const abort = new AbortController();
 

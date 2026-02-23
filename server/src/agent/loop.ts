@@ -336,6 +336,7 @@ export async function runAgentLoop(
   let success = false;
 
   try {
+    console.log(`[Agent ${sessionId}] Starting loop for goal: "${goal}"`);
     for (let step = 0; step < maxSteps; step++) {
       // Check for cancellation
       if (signal?.aborted) {
@@ -344,6 +345,7 @@ export async function runAgentLoop(
       }
 
       stepsUsed = step + 1;
+      console.log(`[Agent ${sessionId}] Starting Step ${stepsUsed}`);
 
       // ── 1. Get screen state from device ─────────────────────
       const screenResponse = (await sessions.sendCommand(deviceId, {
